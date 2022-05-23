@@ -8,11 +8,11 @@ import androidx.room.PrimaryKey
 
     @PrimaryKey(autoGenerate = true)
      var id: Int = 0;
-     var nickname: String = ""
-     var password: String = ""
-     var email: String = ""
-     var telefono: String = ""
-     var tarjetaCredito: String = ""
+     open var nickname: String = ""
+     open var password: String = ""
+     open var email: String = ""
+     open var telefono: String = ""
+     open var tarjetaCredito: String = ""
 
     constructor(nickname: String, password: String, email: String,
                 telefono: String, tarjetaCredito: String)
@@ -23,4 +23,9 @@ import androidx.room.PrimaryKey
         this.telefono = telefono
         this.tarjetaCredito = tarjetaCredito
     }
+
+    override fun toString(): String {
+        return "Usuario(id=$id, nickname='$nickname', password='$password', email='$email', telefono='$telefono', tarjetaCredito='$tarjetaCredito')"
+    }
+
 }

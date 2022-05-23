@@ -3,13 +3,13 @@ package com.bluetooth.padeltournamets.Model.Entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 @Entity
- class Jugador(
-    nickname: String,
-    password: String,
-    email: String,
-    telefono: String,
-    tarjetaCredito: String,
-    var nombre : String,
-    var apellidos : String
+ data class Jugador(
+    override var nickname: String,
+    override var password: String,
+    override var email: String,
+    override var telefono: String,
+    override var tarjetaCredito: String,
+    val nombre : String,
+    val apellidos : String
     //torneosGanados
 ) : Usuario(nickname, password, email, telefono, tarjetaCredito)
