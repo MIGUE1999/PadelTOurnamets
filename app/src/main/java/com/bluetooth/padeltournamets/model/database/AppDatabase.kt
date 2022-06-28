@@ -8,7 +8,8 @@ import com.bluetooth.padeltournamets.model.entities.*
 @Database(entities = [UsuarioEntity::class, JugadorEntity::class, OrganizadorEntity::class, TorneoEntity::class,
                      PistaEntity::class, ParejaEntity::class, PagoEntity::class, EnfrentamientoEntity::class, InscripcionEntity::class,
                      TorneoOrganizadoEntity::class, ReservaEntity::class],
-          version = 1
+          version = 1,
+          exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
