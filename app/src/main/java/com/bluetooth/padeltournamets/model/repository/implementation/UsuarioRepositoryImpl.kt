@@ -1,5 +1,6 @@
 package com.bluetooth.padeltournamets.model.repository.implementation
 
+import androidx.lifecycle.LiveData
 import com.bluetooth.padeltournamets.model.dao.UsuarioDao
 import com.bluetooth.padeltournamets.model.entities.UsuarioEntity
 import com.bluetooth.padeltournamets.model.repository.interfaces.IUsuarioRepository
@@ -8,10 +9,10 @@ import javax.inject.Inject
 
 class UsuarioRepositoryImpl @Inject constructor(private val usuarioDao : UsuarioDao) : IUsuarioRepository {
 
-    override fun getUsuario(usrId: Int): Flow<UsuarioEntity> {
+    override suspend fun getUsuario(usrId: Int): LiveData<UsuarioEntity> {
         return usuarioDao.getUsuarioById(usrId)
     }
-    override fun getAllUsuarios(): Flow<List<UsuarioEntity>> {
+    override fun getAllUsuarios(): LiveData<List<UsuarioEntity>> {
         return usuarioDao.getAllUsuarios()
     }
     override suspend fun insertUsuario(usr: UsuarioEntity) {

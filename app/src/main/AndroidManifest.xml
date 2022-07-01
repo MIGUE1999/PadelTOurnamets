@@ -11,6 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PadelTOurnamets">
         <activity
+            android:name=".ui.view.ui.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.PadelTOurnamets" />
+        <activity
+            android:name=".ui.view.ui.theme.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.PadelTOurnamets" />
+        <activity
             android:name=".ui.view.prueba"
             android:exported="false"
             android:label="@string/title_activity_prueba"

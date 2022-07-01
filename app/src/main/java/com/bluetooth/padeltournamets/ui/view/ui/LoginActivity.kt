@@ -1,4 +1,4 @@
-package com.bluetooth.padeltournamets.ui.view
+package com.bluetooth.padeltournamets.ui.view.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,9 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.bluetooth.padeltournamets.ui.view.ui.theme.PadelTOurnametsTheme
+import com.bluetooth.padeltournamets.ui.view.ui.ui.theme.PadelTOurnametsTheme
 
-class prueba : ComponentActivity() {
+class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +22,7 @@ class prueba : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    Greeting2("Android")
                 }
             }
         }
@@ -30,14 +30,14 @@ class prueba : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
+fun Greeting2(name: String) {
     Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview2() {
+fun DefaultPreview3() {
     PadelTOurnametsTheme {
-        Greeting("Android")
+        Greeting2("Android")
     }
 }
