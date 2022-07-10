@@ -1,14 +1,11 @@
-package com.bluetooth.padeltournamets.ui.viewmodel
+package com.bluetooth.padeltournamets.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.bluetooth.padeltournamets.model.entities.UsuarioEntity
 import com.bluetooth.padeltournamets.model.repository.interfaces.IUsuarioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 

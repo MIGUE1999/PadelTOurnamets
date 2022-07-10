@@ -1,21 +1,27 @@
-package com.bluetooth.padeltournamets.ui.view.ui.ui.theme
+package com.bluetooth.padeltournamets.presentation.view.ui.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = LightBlue800,
+    primaryVariant = LightBlue500,
+    secondary = LightBlue900,
+    background = Color.DarkGray,
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+
+    primary = LightBlue800,
+    primaryVariant = LightBlue500,
+    secondary = LightBlue900,
+    background = Color.DarkGray,
+
+
 
     /* Other default colors to override
     background = Color.White,

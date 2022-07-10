@@ -1,4 +1,4 @@
-package com.bluetooth.padeltournamets.ui.view.ui.theme
+package com.bluetooth.padeltournamets.presentation.view.ui.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

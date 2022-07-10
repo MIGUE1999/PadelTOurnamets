@@ -1,5 +1,6 @@
 package com.bluetooth.padeltournamets.model.repository.implementation
 
+import androidx.lifecycle.LiveData
 import com.bluetooth.padeltournamets.model.dao.TorneoDao
 import com.bluetooth.padeltournamets.model.entities.TorneoEntity
 import com.bluetooth.padeltournamets.model.repository.interfaces.ITorneoRepository
@@ -7,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TorneoRepositoryImpl @Inject constructor(private val torneoDao:TorneoDao): ITorneoRepository {
-    override fun getAllTorneos(): Flow<List<TorneoEntity>> {
+    override fun getAllTorneos(): LiveData<List<TorneoEntity>> {
         return torneoDao.getAllTorneos()
     }
 
-    override fun getTorneoById(idTorneo: Int): Flow<TorneoEntity> {
+    override fun getTorneoById(idTorneo: Int): LiveData<TorneoEntity> {
        return torneoDao.getTorneoById(idTorneo)
     }
 

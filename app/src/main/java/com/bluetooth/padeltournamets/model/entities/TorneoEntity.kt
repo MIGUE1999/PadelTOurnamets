@@ -8,9 +8,14 @@ data class TorneoEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int?,
     val nombre: String,
-    val cartel: String?,
-    val premio: String,
+    val categoria: String,
     val precioInscripcion: String,
-    val categoria: String
+    val fechaInicio: String,
+    val fechaFin: String,
+    val fechaLimiteInscripcion : String,
+    val premio: String,
+    val cartel: String?,
+
+
     //idReserva
 )

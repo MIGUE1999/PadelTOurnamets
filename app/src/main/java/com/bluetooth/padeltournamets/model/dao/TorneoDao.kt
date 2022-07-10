@@ -1,5 +1,6 @@
 package com.bluetooth.padeltournamets.model.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.bluetooth.padeltournamets.model.entities.TorneoEntity
 import kotlinx.coroutines.flow.Flow
@@ -8,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 interface TorneoDao  {
 
     @Query("SELECT * FROM TorneoEntity")
-    fun getAllTorneos() : Flow<List<TorneoEntity>>
+    fun getAllTorneos() : LiveData<List<TorneoEntity>>
 
     @Query("SELECT * FROM TorneoEntity WHERE id = :idTorneo")
-    fun getTorneoById(idTorneo: Int) : Flow<TorneoEntity>
+    fun getTorneoById(idTorneo: Int) : LiveData<TorneoEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTorneo(torneoEntity: TorneoEntity)

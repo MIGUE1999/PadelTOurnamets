@@ -1,4 +1,4 @@
-package com.bluetooth.padeltournamets.ui.view.ui.theme.ui.theme
+package com.bluetooth.padeltournamets.presentation.view.ui.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
