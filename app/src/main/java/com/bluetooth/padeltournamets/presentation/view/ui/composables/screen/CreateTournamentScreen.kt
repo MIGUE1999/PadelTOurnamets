@@ -1,6 +1,7 @@
-package com.bluetooth.padeltournamets.presentation.view.ui.composables.Screen
+package com.bluetooth.padeltournamets.presentation.view.ui.composables.screen
 
 import android.content.Context
+import android.util.Log
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,18 +22,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.PickImageFromGallery
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.showDatePicker
+import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.bluetooth.padeltournamets.utilities.INICIO_TORNEO
 import com.bluetooth.padeltournamets.utilities.FIN_TORNEO
 
+
+
+
+
 @Composable
-fun CrearTorneo(context : Context){
+fun CreateTournament(context : Context, navController: NavController){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
 
+    val tournamentViewModel = hiltViewModel<TournamentViewModel>()
+
+    /*
+    val tournament = TournamentEntity(id = 0 ,nombre="Torneo canada", categoria = "1",
+        precioInscripcion = "10", fechaInicio = "Lunes", fechaFin = "Martes",
+        fechaLimiteInscripcion = "Manana", premio = "50")
+*/
     val selectedCategory = remember{
         mutableStateOf("")
     }
@@ -53,22 +70,29 @@ fun CrearTorneo(context : Context){
                 inputType = InputType.NombreTorneo,
                 keyboardActions = KeyboardActions(onDone = {
                     passwordFocusRequester.requestFocus()
-                }),
+                }), tournamentViewModel = tournamentViewModel
             )
+
+            TextImput(InputType.FechaLimiteInscripcion, keyboardActions = KeyboardActions(onDone = {
+                passwordFocusRequester.requestFocus()
+            }), tournamentViewModel = tournamentViewModel)
 
             TextImput(InputType.Premio, keyboardActions = KeyboardActions(onDone = {
                 passwordFocusRequester.requestFocus()
-            }))
+            }), tournamentViewModel = tournamentViewModel)
 
             TextImput(InputType.PrecioInscripcion, keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
-            }), focusRequester = passwordFocusRequester)
+            }), focusRequester = passwordFocusRequester, tournamentViewModel = tournamentViewModel)
 
             Text(text = "Seleccione Categoria", color = Color.White)
             Row {
                 RadioButton(
-                    selected = selectedCategory.value == Categoria.primera,
-                    onClick = { selectedCategory.value = Categoria.primera },
+                    selected = tournamentViewModel.category.value == Categoria.primera,
+                    onClick =
+                    {
+                        tournamentViewModel.onCategoryChanged(Categoria.primera)
+                    },
                     colors = RadioButtonDefaults.colors(Color.Green)
                 )
                 Spacer(modifier = Modifier.size(16.dp))
@@ -76,8 +100,11 @@ fun CrearTorneo(context : Context){
                 Spacer(modifier = Modifier.size(16.dp))
 
                 RadioButton(
-                    selected = selectedCategory.value == Categoria.segunda,
-                    onClick = { selectedCategory.value = Categoria.segunda},
+                    selected = tournamentViewModel.category.value == Categoria.segunda,
+                    onClick =
+                    {
+                        tournamentViewModel.onCategoryChanged(Categoria.segunda)
+                    },
                     colors = RadioButtonDefaults.colors(Color.Green)
                 )
                 Spacer(modifier = Modifier.size(16.dp))
@@ -85,8 +112,11 @@ fun CrearTorneo(context : Context){
                 Spacer(modifier = Modifier.size(16.dp))
 
                 RadioButton(
-                    selected = selectedCategory.value == Categoria.tercera,
-                    onClick = { selectedCategory.value = Categoria.tercera },
+                    selected = tournamentViewModel.category.value == Categoria.tercera,
+                    onClick =
+                    {
+                        tournamentViewModel.onCategoryChanged(Categoria.tercera)
+                    },
                     colors = RadioButtonDefaults.colors(Color.Green)
                 )
                 Spacer(modifier = Modifier.size(16.dp))
@@ -94,11 +124,25 @@ fun CrearTorneo(context : Context){
                 Spacer(modifier = Modifier.size(16.dp))
 
             }
-            showDatePicker(context, INICIO_TORNEO, FIN_TORNEO)
+            showDatePicker(context, INICIO_TORNEO, FIN_TORNEO, tournamentViewModel = tournamentViewModel)
 
-            PickImageFromGallery()
+            PickImageFromGallery(tournamentViewModel)
 
-            Button(onClick = {  }, modifier = Modifier.fillMaxWidth().padding(5.dp)) {
+            Button(onClick = {
+                var tournament = TournamentEntity(nombre = tournamentViewModel.nameTournament.value,
+                    precioInscripcion = tournamentViewModel.inscriptionCost.value,
+                    premio = tournamentViewModel.priceTournament.value,
+                    categoria = tournamentViewModel.category.value,
+                    fechaInicio = tournamentViewModel.dateIni.value,
+                    fechaFin = tournamentViewModel.dateFin.value,
+                    cartel = tournamentViewModel.cartel.value,
+                    fechaLimiteInscripcion = tournamentViewModel.dateLimit.value,
+                    )
+                tournamentViewModel.insertTournament(tournament)
+                Log.d("CreatePreNav", tournamentViewModel.getAllTournaments.toString())
+                navController.navigate(BottomBarScreen.Home.route)
+                Log.d("CreatePostNav", tournamentViewModel.getAllTournaments.value.toString())
+            }, modifier = Modifier.fillMaxWidth().padding(5.dp)) {
                 Text(text = "Crear Torneo")
             }
 

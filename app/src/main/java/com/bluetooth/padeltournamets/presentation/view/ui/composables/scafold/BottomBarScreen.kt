@@ -1,6 +1,7 @@
-package com.bluetooth.padeltournamets.presentation.view.ui.composables.Scafold
+package com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -25,5 +26,10 @@ sealed class BottomBarScreen(
         route = "profile",
         title = "Profile",
         icon = Icons.Default.Person
+    )
+    object CreateTournament : BottomBarScreen(
+        route = "create_tournament",
+        title = "CreateTournament",
+        icon = Icons.Default.Add
     )
 }

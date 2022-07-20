@@ -11,7 +11,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -52,8 +51,8 @@ object RoomModule {
 */
     @Provides
     @Singleton
-    fun provideTorneoRepository(db:AppDatabase) : ITorneoRepository {
-        return TorneoRepositoryImpl(db.torneoDao)
+    fun provideTournamentRepository(db:AppDatabase) : ITournamentRepository {
+        return TournamentRepositoryImpl(db.tournamentDao)
     }
 /*
     @Provides

@@ -1,4 +1,4 @@
-package com.bluetooth.padeltournamets.presentation.view.ui.composables.Screen
+package com.bluetooth.padeltournamets.presentation.view.ui.composables.screen
 
 
 import androidx.compose.foundation.Image
@@ -98,7 +98,7 @@ fun ProfilePlayerData(){
 
             TextImput(InputType.Nickname, keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
-            }), focusRequester = passwordFocusRequester, valueField = "MIGUE1999" )     //valuefied = getNicknameUser
+            }), focusRequester = passwordFocusRequester)     //valuefied = getNicknameUser
 
             TextImput(
                 inputType = InputType.Name,
@@ -121,7 +121,7 @@ fun ProfilePlayerData(){
 
             TextImput(InputType.Password, keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
-            }), focusRequester = passwordFocusRequester, valueField = "123456") //valuefied = getPasswordUser
+            }), focusRequester = passwordFocusRequester) //valuefied = getPasswordUser
 
             Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
                 Text("Guardar Cambios", Modifier.padding(vertical = 8.dp))
@@ -167,7 +167,7 @@ fun ProfileOrganizatorData(){
 
             TextImput(InputType.Password, keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
-            }), focusRequester = passwordFocusRequester, valueField = "123456") //valuefied = getPasswordUser
+            }), focusRequester = passwordFocusRequester) //valuefied = getPasswordUser
 
             TextImput(InputType.Nif, keyboardActions = KeyboardActions(onDone = {
                 passwordFocusRequester.requestFocus()

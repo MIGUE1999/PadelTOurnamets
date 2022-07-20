@@ -1,6 +1,5 @@
 package com.bluetooth.padeltournamets.presentation.view.ui.composables
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,24 +12,27 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.Screen.Login
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.Screen.TournamentList
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.TournamentList
 import com.bluetooth.padeltournamets.presentation.view.ui.recipeList.FoodCategory
 import com.bluetooth.padeltournamets.presentation.view.ui.recipeList.getAllFoodCategories
 import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
+import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 
 @Composable
-fun SearchScreen(mainViewModel: SearchViewModel) {
+fun SearchScreen(mainViewModel: SearchViewModel,
+                 //tournamentViewModel: TournamentViewModel = hiltViewModel()
+                 ) {
+
+    val tournamentViewModel = hiltViewModel<TournamentViewModel>()
     val selectedCategory = FoodCategory.CHICKEN
     val searchWidgetState by mainViewModel.searchWidgetState
     val searchTextState by mainViewModel.searchTextState
-    val numbers = listOf(1, 2, 3, 4, 5, 6)
+    val allTournaments = tournamentViewModel.getAllTournaments.value
     Column()
     {
         Surface(
@@ -47,7 +49,7 @@ fun SearchScreen(mainViewModel: SearchViewModel) {
                     SearcherBar()
                 }
                 CategoryFilter(selectedCategory = selectedCategory)
-                TournamentList(numbers = numbers)
+                TournamentList(tournaments = allTournaments)
             }
         }
     }

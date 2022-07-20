@@ -1,4 +1,4 @@
-package com.bluetooth.padeltournamets.presentation.view.ui.composables.Screen
+package com.bluetooth.padeltournamets.presentation.view.ui.composables.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

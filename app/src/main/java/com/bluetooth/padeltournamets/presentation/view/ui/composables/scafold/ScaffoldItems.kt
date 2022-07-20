@@ -1,7 +1,5 @@
 package com.bluetooth.padeltournamets.presentation.view.ui.composables
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,25 +9,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.Scafold.BottomBarScreen
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.GreenTenis
 import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
 
 
 @Composable
-fun ScaffoldScreen(context : Context, searchViewModel : SearchViewModel) {
-    val navController = rememberNavController()
+fun ScaffoldScreen(navController: NavHostController, searchViewModel : SearchViewModel = hiltViewModel())
+{
     Scaffold(
         content = {BottomNavGraph(navController = navController, searchViewModel)},
-        floatingActionButton = {FAB()},
+        floatingActionButton = {FAB(navController = navController)},
         bottomBar = { BottomBar(navController = navController,) }
     )
 }
@@ -47,10 +45,9 @@ fun TopBar(){
 }
 
 @Composable
-fun FAB(){
-    val context = LocalContext.current
+fun FAB(navController: NavController){
     FloatingActionButton(onClick = {
-        Toast.makeText(context, "Ir a Crear Torneo", Toast.LENGTH_SHORT).show()
+        navController.navigate(BottomBarScreen.CreateTournament.route)
     }, backgroundColor= Color.Green){
         Icon(imageVector = Icons.Default.Add, "Crear Torneo")
     }

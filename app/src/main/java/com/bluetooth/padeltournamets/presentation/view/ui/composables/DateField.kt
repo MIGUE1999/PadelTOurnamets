@@ -18,9 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import java.util.*
 import com.bluetooth.padeltournamets.R.drawable.ic_baseline_calendar_today_24
+import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 @Composable
-fun showDatePicker(context: Context, inicioTorneo: String, finTorneo: String){
+fun showDatePicker(context: Context, inicioTorneo: String, finTorneo: String, tournamentViewModel : TournamentViewModel){
 
     val year: Int
     val month: Int
@@ -32,20 +33,23 @@ fun showDatePicker(context: Context, inicioTorneo: String, finTorneo: String){
     day = calendar.get(Calendar.DAY_OF_MONTH)
     calendar.time = Date()
 
-    val dateInit = remember { mutableStateOf("") }
+    //val dateInit = remember { mutableStateOf("") }
     val dateEnd = remember { mutableStateOf("") }
 
     val datePickerDialogInit = DatePickerDialog(
         context,
         {_: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateInit.value = "$dayOfMonth/$month/$year"
+            //dateInit.value = "$dayOfMonth/$month/$year"
+            tournamentViewModel.onDateInitChanged("$dayOfMonth/$month/$year")
+
         }, year, month, day
     )
 
     val datePickerDialogEnd = DatePickerDialog(
         context,
         {_: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            dateEnd.value = "$dayOfMonth/$month/$year"
+            tournamentViewModel.onDateFinChanged("$dayOfMonth/$month/$year")
+
         }, year, month, day
     )
 
@@ -55,7 +59,7 @@ fun showDatePicker(context: Context, inicioTorneo: String, finTorneo: String){
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "$inicioTorneo: ${dateInit.value}", color = Color.White, modifier = Modifier.width(120.dp))
+                    Text(text = "$inicioTorneo: ${tournamentViewModel.dateIni.value}", color = Color.White, modifier = Modifier.width(120.dp))
                     Spacer(modifier = Modifier.size(16.dp))
                     Button(
                         onClick = {
@@ -79,7 +83,7 @@ fun showDatePicker(context: Context, inicioTorneo: String, finTorneo: String){
                     verticalAlignment = Alignment.CenterVertically) {
 
 
-                    Text(text = "$finTorneo: ${dateEnd.value}", color = Color.White, modifier = Modifier.width(120.dp) )
+                    Text(text = "$finTorneo: ${tournamentViewModel.dateFin.value}", color = Color.White, modifier = Modifier.width(120.dp) )
                     Spacer(modifier = Modifier.size(16.dp))
                     Button(
                         onClick = {

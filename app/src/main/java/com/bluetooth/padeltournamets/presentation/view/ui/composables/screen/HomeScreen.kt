@@ -1,5 +1,6 @@
-package com.bluetooth.padeltournamets.presentation.view.ui.composables.Screen
+package com.bluetooth.padeltournamets.presentation.view.ui.composables.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,19 +13,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.TopBar
+import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.UsuarioViewModel
 import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun HomeScreen(
     usuarioViewModel: UsuarioViewModel = hiltViewModel(),
+    //tournamentViewModel: TournamentViewModel = hiltViewModel()
 ) {
     val numbers = listOf(1, 2, 3, 4, 5, 6)
+    val tournamentViewModel = hiltViewModel<TournamentViewModel>()
+
     Scaffold(topBar = { TopBar() }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Tus Torneos", color = Color.White, style = MaterialTheme.typography.h3)
-            TournamentList(numbers = numbers)
+            TournamentList(tournaments = tournamentViewModel.getAllTournaments.value )
         }
     }
 
@@ -44,13 +50,18 @@ fun HomeScreen(
 }
 
 @Composable
-fun TournamentList(numbers : List<Int>)
+fun TournamentList(tournaments : List<TournamentEntity>?)
 {
     LazyColumn() {
-        var itemCount = numbers.size
-        items(count = itemCount) {
-            TournamentCard(isOrganizador = true)
+        var itemCount = tournaments?.size
+        if(itemCount!=null) {
+            items(count = itemCount) {
+                TournamentCard(isOrganizador = true)
+            }
+            Log.d("Home", "Esta lleno:${tournaments?.size}")
+
         }
+        else Log.d("Home", "Esta vacio:${tournaments?.size}")
     }
 }
 
