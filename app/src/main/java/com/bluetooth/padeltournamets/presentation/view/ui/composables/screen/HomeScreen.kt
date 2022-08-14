@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,16 +24,16 @@ import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun HomeScreen(
-    usuarioViewModel: UsuarioViewModel = hiltViewModel(),
-    //tournamentViewModel: TournamentViewModel = hiltViewModel()
+    //usuarioViewModel: UsuarioViewModel = hiltViewModel(),
+    tournamentViewModel: TournamentViewModel
 ) {
     val numbers = listOf(1, 2, 3, 4, 5, 6)
-    val tournamentViewModel = hiltViewModel<TournamentViewModel>()
+    //val tournamentViewModel = hiltViewModel<TournamentViewModel>()
 
     Scaffold(topBar = { TopBar() }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Tus Torneos", color = Color.White, style = MaterialTheme.typography.h3)
-            TournamentList(tournaments = tournamentViewModel.getAllTournaments.value )
+            TournamentList(tournamentViewModel = tournamentViewModel )
         }
     }
 
@@ -50,18 +53,15 @@ fun HomeScreen(
 }
 
 @Composable
-fun TournamentList(tournaments : List<TournamentEntity>?)
+fun TournamentList(tournamentViewModel : TournamentViewModel)
 {
-    LazyColumn() {
-        var itemCount = tournaments?.size
-        if(itemCount!=null) {
-            items(count = itemCount) {
-                TournamentCard(isOrganizador = true)
-            }
-            Log.d("Home", "Esta lleno:${tournaments?.size}")
+    val tournaments by tournamentViewModel.getAllTournaments.observeAsState(arrayListOf())
 
-        }
-        else Log.d("Home", "Esta vacio:${tournaments?.size}")
+    Log.d("HomeScreen:", "Numero torneos: " + tournaments.size)
+    LazyColumn() {
+            items(items = tournaments) { tournament ->
+                TournamentCard(isOrganizador = true, tournament, tournamentViewModel)
+            }
     }
 }
 

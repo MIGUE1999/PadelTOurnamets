@@ -3,12 +3,13 @@ package com.bluetooth.padeltournamets.model.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.bluetooth.padeltournamets.model.entities.TournamentEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TournamentDao  {
 
     @Query("SELECT * FROM torneo")
-    fun getAll() : LiveData<List<TournamentEntity>>
+    fun getAll(): LiveData<List<TournamentEntity>>
 
     @Query("SELECT * FROM torneo WHERE id = :idTorneo")
     fun getById(idTorneo: Int) : LiveData<TournamentEntity>

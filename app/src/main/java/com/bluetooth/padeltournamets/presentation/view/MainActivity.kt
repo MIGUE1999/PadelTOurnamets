@@ -20,6 +20,8 @@ class MainActivity: ComponentActivity() {
     lateinit var navController : NavHostController
 
     private val searchViewModel: SearchViewModel by viewModels()
+    private val tournamentViewModel: TournamentViewModel by viewModels()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +40,7 @@ class MainActivity: ComponentActivity() {
                 }
                  */
                 navController = rememberNavController()
-                ScaffoldScreen(navController = navController, searchViewModel)
+                ScaffoldScreen(navController = navController, searchViewModel , tournamentViewModel)
 
             }
         }

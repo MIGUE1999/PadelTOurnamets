@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
@@ -25,14 +26,15 @@ import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 @Composable
 fun SearchScreen(mainViewModel: SearchViewModel,
-                 //tournamentViewModel: TournamentViewModel = hiltViewModel()
+                 tournamentViewModel: TournamentViewModel
                  ) {
 
-    val tournamentViewModel = hiltViewModel<TournamentViewModel>()
+    //val tournamentViewModel = hiltViewModel<TournamentViewModel>()
     val selectedCategory = FoodCategory.CHICKEN
     val searchWidgetState by mainViewModel.searchWidgetState
     val searchTextState by mainViewModel.searchTextState
-    val allTournaments = tournamentViewModel.getAllTournaments.value
+    //val allTournaments by tournamentViewModel.getAllTournaments.observeAsState(arrayListOf())
+
     Column()
     {
         Surface(
@@ -49,7 +51,7 @@ fun SearchScreen(mainViewModel: SearchViewModel,
                     SearcherBar()
                 }
                 CategoryFilter(selectedCategory = selectedCategory)
-                TournamentList(tournaments = allTournaments)
+                TournamentList(tournamentViewModel = tournamentViewModel)
             }
         }
     }

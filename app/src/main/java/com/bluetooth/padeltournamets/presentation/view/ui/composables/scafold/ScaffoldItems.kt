@@ -20,13 +20,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.GreenTenis
 import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
+import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 
 @Composable
-fun ScaffoldScreen(navController: NavHostController, searchViewModel : SearchViewModel = hiltViewModel())
+fun ScaffoldScreen(navController: NavHostController,
+                   searchViewModel : SearchViewModel = hiltViewModel(),
+                   tournamentViewModel : TournamentViewModel)
 {
     Scaffold(
-        content = {BottomNavGraph(navController = navController, searchViewModel)},
+        content = {BottomNavGraph(navController = navController, searchViewModel, tournamentViewModel)},
         floatingActionButton = {FAB(navController = navController)},
         bottomBar = { BottomBar(navController = navController,) }
     )

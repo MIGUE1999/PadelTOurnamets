@@ -39,11 +39,12 @@ import com.bluetooth.padeltournamets.utilities.FIN_TORNEO
 
 
 @Composable
-fun CreateTournament(context : Context, navController: NavController){
+fun CreateTournament(context : Context, navController: NavController,
+                     tournamentViewModel : TournamentViewModel){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
 
-    val tournamentViewModel = hiltViewModel<TournamentViewModel>()
+    //val tournamentViewModel = hiltViewModel<TournamentViewModel>()
 
     /*
     val tournament = TournamentEntity(id = 0 ,nombre="Torneo canada", categoria = "1",

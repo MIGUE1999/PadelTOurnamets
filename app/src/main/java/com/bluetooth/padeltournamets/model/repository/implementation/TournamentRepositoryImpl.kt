@@ -7,9 +7,8 @@ import com.bluetooth.padeltournamets.model.repository.interfaces.ITournamentRepo
 import javax.inject.Inject
 
 class TournamentRepositoryImpl @Inject constructor(private val tournamentDao:TournamentDao): ITournamentRepository {
-    override fun getAllTorneos(): LiveData<List<TournamentEntity>> {
-        return tournamentDao.getAll()
-    }
+
+    override fun getAllTorneos() = tournamentDao.getAll()
 
     override fun getTorneoById(idTorneo: Int): LiveData<TournamentEntity> {
        return tournamentDao.getById(idTorneo)

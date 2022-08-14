@@ -2,6 +2,7 @@ package com.bluetooth.padeltournamets.model.repository.interfaces
 
 import androidx.lifecycle.LiveData
 import com.bluetooth.padeltournamets.model.entities.TournamentEntity
+import kotlinx.coroutines.flow.Flow
 
 interface ITournamentRepository {
     fun getAllTorneos() : LiveData<List<TournamentEntity>>

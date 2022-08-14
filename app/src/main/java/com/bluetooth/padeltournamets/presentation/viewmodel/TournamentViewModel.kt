@@ -1,6 +1,7 @@
 package com.bluetooth.padeltournamets.presentation.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -11,14 +12,15 @@ import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.model.repository.interfaces.ITournamentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TournamentViewModel @Inject constructor(
     private val tournamentRepository : ITournamentRepository
-) : ViewModel() {
-
+) : ViewModel()
+{
     val nameTournament = mutableStateOf("")
     val priceTournament = mutableStateOf("")
     val inscriptionCost = mutableStateOf("")
@@ -28,8 +30,9 @@ class TournamentViewModel @Inject constructor(
     val dateLimit = mutableStateOf("")
     val cartel = mutableStateOf<Bitmap?>(null)
 
-
-    val getAllTournaments : LiveData<List<TournamentEntity>> = tournamentRepository.getAllTorneos()
+    val getAllTournaments : LiveData<List<TournamentEntity>> by lazy {
+        tournamentRepository.getAllTorneos()
+    }
 
     fun getTournamentById(id:Int) : LiveData<TournamentEntity>{
         return  tournamentRepository.getTorneoById(id)
@@ -38,6 +41,7 @@ class TournamentViewModel @Inject constructor(
     fun insertTournament(tournament : TournamentEntity){
         viewModelScope.launch(Dispatchers.IO) {
             tournamentRepository.insertTorneo(tournament)
+            delay(3000)
         }
     }
 
@@ -91,4 +95,5 @@ class TournamentViewModel @Inject constructor(
         this.cartel.value = img
     }
 }
+
 

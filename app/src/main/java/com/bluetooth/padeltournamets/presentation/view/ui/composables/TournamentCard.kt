@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,9 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bluetooth.padeltournamets.R
+import com.bluetooth.padeltournamets.model.entities.TournamentEntity
+import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 @Composable
-fun TournamentCard(isOrganizador : Boolean){
+fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tournamentViewModel: TournamentViewModel){
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 1.dp,
@@ -40,18 +43,24 @@ fun TournamentCard(isOrganizador : Boolean){
             Column(
                 Modifier.weight(1f),
             ){
-                Text("NombreTorneo:", style= MaterialTheme.typography.h5)
+                Text("NombreTorneo:" + tournament.nombre, style= MaterialTheme.typography.h5)
                 Text("FechaInicio: ")
                 Text("FechaFin:")
                 Text("Categoria")
                 Text("Premio")
             }
             Spacer()
-            if(isOrganizador)
-                IconButton(onClick= {
+            if(isOrganizador) {
+                IconButton(onClick = {
                 }) {
                     Icon(Icons.Filled.Edit, "EditTournament")
                 }
+                IconButton(onClick = {
+                    tournamentViewModel.deleteTournament(tournament)
+                }) {
+                    Icon(Icons.Filled.Delete, "DeleteTournament")
+                }
+            }
         }
     }
 }
