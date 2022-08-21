@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.bluetooth.padeltournamets.R.drawable.ic_baseline_emoji_emotions_24
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.TopBar
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.TopBar
 
 
 @Composable
@@ -169,13 +169,13 @@ fun ProfileOrganizatorData(){
                 focusManager.clearFocus()
             }), focusRequester = passwordFocusRequester) //valuefied = getPasswordUser
 
-            TextImput(InputType.Nif, keyboardActions = KeyboardActions(onDone = {
+            TextImput(InputType.Cif, keyboardActions = KeyboardActions(onDone = {
                 passwordFocusRequester.requestFocus()
             }))
-            TextImput(InputType.NombreClub, keyboardActions = KeyboardActions(onDone = {
+            TextImput(InputType.ClubName, keyboardActions = KeyboardActions(onDone = {
                 passwordFocusRequester.requestFocus()
             }))
-            TextImput(InputType.CuentaBancaria, keyboardActions = KeyboardActions(onDone = {
+            TextImput(InputType.BankAccount, keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
             }), focusRequester = passwordFocusRequester)
 

@@ -7,10 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.*
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.ScaffoldScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.PadelTOurnametsTheme
-import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
-import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
+import com.bluetooth.padeltournamets.presentation.viewmodel.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,7 +20,9 @@ class MainActivity: ComponentActivity() {
 
     private val searchViewModel: SearchViewModel by viewModels()
     private val tournamentViewModel: TournamentViewModel by viewModels()
-
+    private val userViewModel: UserViewModel by viewModels()
+    private val playerViewModel : PlayerViewModel by viewModels()
+    private val organizatorViewModel : OrganizatorViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,8 @@ class MainActivity: ComponentActivity() {
                 }
                  */
                 navController = rememberNavController()
-                ScaffoldScreen(navController = navController, searchViewModel , tournamentViewModel)
+                ScaffoldScreen(navController = navController, searchViewModel , tournamentViewModel,
+                    userViewModel, playerViewModel, organizatorViewModel )
 
             }
         }

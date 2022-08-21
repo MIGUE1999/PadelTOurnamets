@@ -56,13 +56,13 @@ class TournamentViewModel @Inject constructor(
             tournamentRepository.deleteTorneo(tournament)
         }
     }
-
+/*
     fun deleteTournaments(tournaments : List<TournamentEntity>){
         viewModelScope.launch(Dispatchers.IO) {
             tournamentRepository.deleteTorneos(tournaments)
         }
     }
-
+*/
     fun onNameChanged(name:String){
         nameTournament.value = name
     }

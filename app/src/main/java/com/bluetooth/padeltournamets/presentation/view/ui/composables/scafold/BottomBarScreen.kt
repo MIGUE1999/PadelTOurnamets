@@ -32,4 +32,14 @@ sealed class BottomBarScreen(
         title = "CreateTournament",
         icon = Icons.Default.Add
     )
+    object LogIn : BottomBarScreen(
+        route = "log_in",
+        title = "LogIn",
+        icon = Icons.Default.Add
+    )
+    object SignUp : BottomBarScreen(
+        route = "sign_up",
+        title = "SignUp",
+        icon = Icons.Default.Add
+    )
 }

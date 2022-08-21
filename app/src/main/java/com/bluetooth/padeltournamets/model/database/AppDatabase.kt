@@ -5,26 +5,26 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bluetooth.padeltournamets.model.dao.*
 import com.bluetooth.padeltournamets.model.entities.*
+import com.bluetooth.padeltournamets.model.entities.relations.OrganizatorWithTournaments
 import com.bluetooth.padeltournamets.utilities.Converters
 
-@Database(entities = [UsuarioEntity::class, JugadorEntity::class, OrganizadorEntity::class, TournamentEntity::class,
-                     PistaEntity::class, ParejaEntity::class, PagoEntity::class, EnfrentamientoEntity::class, InscripcionEntity::class,
-                     TorneoOrganizadoEntity::class, ReservaEntity::class],
+@Database(entities = [UserEntity::class, PlayerEntity::class, OrganizatorEntity::class,
+                      TournamentEntity::class, CourtEntity::class,
+                      InscripcionEntity::class, ReservaEntity::class,
+                     //OrganizatorWithTournaments::class
+                        ],
           version = 1,
           exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract val usuarioDao : UsuarioDao
-    abstract val jugadorDao : JugadorDao
-    abstract val organizadorDao : OrganizadorDao
+    abstract val userDao : UserDao
     abstract val tournamentDao : TournamentDao
-    abstract val pistaDao: PistaDao
-    abstract val parejaDao: ParejaDao
-    abstract val pagoDao: PagoDao
-    abstract val enfrentamientoDao : EnfrentamientoDao
+    abstract val playerDao : PlayerDao
+    abstract val organizatorDao : OrganizatorDao
+    abstract val courtDao: CourtDao
     abstract val inscripcionDao : InscripcionDao
-    abstract val torneoOrganizadoDao : TorneoOrganizadoDao
     abstract val reservaDao : ReservaDao
+    //abstract val organizatorWithTournaments : OrganizatorWithTournaments
 }

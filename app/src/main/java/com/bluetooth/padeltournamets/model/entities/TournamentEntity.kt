@@ -20,7 +20,7 @@ data class TournamentEntity(
     @ColumnInfo(name = "fecha_limite_inscripcion")
     val fechaLimiteInscripcion : String,
     val premio: String,
-    val cartel: Bitmap?
-
+    val cartel: Bitmap?,
+    //val idOrganizator : Int
     //idReserva
 )

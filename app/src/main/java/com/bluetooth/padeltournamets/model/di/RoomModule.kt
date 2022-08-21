@@ -30,20 +30,10 @@ object RoomModule {
 */
     @Provides
     @Singleton
-    fun provideUsuarioRepository(db:AppDatabase) : IUsuarioRepository {
-        return UsuarioRepositoryImpl(db.usuarioDao)
+    fun provideUserRepository(db:AppDatabase) : IUserRepository {
+        return UserRepositoryImpl(db.userDao)
     }
 
-/*
-    @Provides
-    @Singleton
-    fun provideTorneoOrganizadoDao(db:AppDatabase) = db.torneoOrganizadoDao
-*/
-    @Provides
-    @Singleton
-    fun provideTorneoOrganizadoRepository(db:AppDatabase) : ITorneoOrganizadoRepository {
-        return TorneoOrganizadoRepositoryImpl(db.torneoOrganizadoDao)
-    }
 /*
     @Provides
     @Singleton
@@ -71,29 +61,11 @@ object RoomModule {
 */
     @Provides
     @Singleton
-    fun providePistaRepository(db:AppDatabase) : IPistaRepository {
-        return PistaRepositoryImpl(db.pistaDao)
+    fun provideCourtRepository(db:AppDatabase) : ICourtRepository {
+        return CourtRepositoryImpl(db.courtDao)
     }
-/*
-    @Provides
-    @Singleton
-    fun provideParejaDao(db:AppDatabase) = db.parejaDao
-*/
-    @Provides
-    @Singleton
-    fun provideParejaRepository(db:AppDatabase) : IParejaRepository {
-        return ParejaRepositoryImpl(db.parejaDao)
-    }
-  /*
-    @Provides
-    @Singleton
-    fun providePagoDao(db:AppDatabase) = db.pagoDao
-*/
-    @Provides
-    @Singleton
-    fun providePagoRepository(db:AppDatabase) : IPagoRepository {
-        return PagoRepositoryImpl(db.pagoDao)
-    }
+
+
 /*
     @Provides
     @Singleton
@@ -101,8 +73,8 @@ object RoomModule {
 */
     @Provides
     @Singleton
-    fun provideOrganizadorRepository(db:AppDatabase) : IOrganizadorRepository {
-        return OrganizadorRepositoryImpl(db.organizadorDao)
+    fun provideOrganizatorRepository(db:AppDatabase) : IOrganizatorRepository {
+        return OrganizatorRepositoryImpl(db.organizatorDao)
     }
 /*
     @Provides
@@ -111,8 +83,8 @@ object RoomModule {
 */
     @Provides
     @Singleton
-    fun provideJugadorRepository(db:AppDatabase) : IJugadorRepository {
-        return JugadorRepositoryImpl(db.jugadorDao)
+    fun providePlayerRepository(db:AppDatabase) : IPlayerRepository {
+        return PlayerRepositoryImpl(db.playerDao)
     }
 /*
     @Provides
@@ -124,15 +96,6 @@ object RoomModule {
     fun provideInscripcionRepository(db:AppDatabase) : IInscripcionRepository {
         return InscripcionRepositoryImpl(db.inscripcionDao)
     }
-/*
-    @Provides
-    @Singleton
-    fun provideEnfrentamientoDao(db:AppDatabase) = db.enfrentamientoDao
-*/
-    @Provides
-    @Singleton
-    fun provideEnfrentamientoRepository(db:AppDatabase) : IEnfrentamientoRepository {
-        return EnfrentamientoRepositoryImpl(db.enfrentamientoDao)
-    }
+
 
 }

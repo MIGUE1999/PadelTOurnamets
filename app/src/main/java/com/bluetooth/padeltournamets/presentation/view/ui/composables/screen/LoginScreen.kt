@@ -10,7 +10,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,14 +28,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.Shapes
+import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
+import com.bluetooth.padeltournamets.presentation.viewmodel.PlayerViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
+import com.bluetooth.padeltournamets.presentation.viewmodel.UserViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 
 
 @Composable
-fun Login(){
+fun Login(userViewModel: UserViewModel, navController: NavController){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
 
@@ -53,13 +59,15 @@ fun Login(){
                     fontWeight = FontWeight.Bold,
                     modifier=Modifier.padding(bottom = 30.dp) )
 
-                TextImput(InputType.Name, keyboardActions = KeyboardActions(onNext = {
+                TextImputLogin(InputType.Correo, keyboardActions = KeyboardActions(onNext = {
                     passwordFocusRequester.requestFocus()
-                }))
+                }), userViewModel = userViewModel)
 
-                TextImput(InputType.Password, keyboardActions = KeyboardActions(onDone = {
+                TextImputLogin(InputType.Password, keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
-                }), focusRequester = passwordFocusRequester)
+                }), focusRequester = passwordFocusRequester,
+                    userViewModel = userViewModel
+                )
 
                 Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
                     Text("SIGN IN", Modifier.padding(vertical = 8.dp))
@@ -71,7 +79,7 @@ fun Login(){
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Don't have an account?", color = Color.White)
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = { navController.navigate(BottomBarScreen.SignUp.route) }) {
                         Text("SING UP")
                     }
                 }
@@ -86,7 +94,7 @@ sealed class InputType(val label:String,
                         val visualTransformation: VisualTransformation)
 {
     object Name:InputType(
-        label = "Name",
+        label = "Nombre",
         icon = Icons.Default.Person,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         visualTransformation = VisualTransformation.None
@@ -127,19 +135,19 @@ sealed class InputType(val label:String,
         visualTransformation = VisualTransformation.None
     )
     //Organizador
-    object Nif:InputType(
-        label = "NIF",
+    object Cif:InputType(
+        label = "CIF",
         icon = null,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         visualTransformation = VisualTransformation.None
     )
-    object NombreClub:InputType(
+    object ClubName:InputType(
         label = "Nombre del Club",
         icon = null,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         visualTransformation = VisualTransformation.None
     )
-    object CuentaBancaria:InputType(
+    object BankAccount:InputType(
         label = "IBAN",
         icon = null,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -174,80 +182,94 @@ sealed class InputType(val label:String,
 }
 
 @Composable
+fun TextImputLogin(
+    inputType: InputType,
+    focusRequester: FocusRequester? = null,
+    keyboardActions: KeyboardActions,
+    userViewModel: UserViewModel? = null
+) {
+
+    val value : String
+
+    if(userViewModel != null) {
+        if (inputType != InputType.Password) {
+            value = userViewModel.emailUser.value
+            TextField(
+                value = value,
+                onValueChange = { inputValue ->
+                    userViewModel.onEmailChanged(inputValue)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusOrder(focusRequester ?: FocusRequester()),
+                leadingIcon = {
+                    if (inputType.icon != null)
+                        Icon(imageVector = inputType.icon, null)
+                },
+                label = { Text(text = inputType.label) },
+                shape = Shapes.small,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                singleLine = true,
+                keyboardOptions = inputType.keyboardOptions,
+                visualTransformation = inputType.visualTransformation,
+                keyboardActions = keyboardActions
+            )
+        } else {
+            var passwordVisibility by remember { mutableStateOf(false) }
+
+            val icon = if (passwordVisibility)
+                painterResource(id = com.google.android.material.R.drawable.design_ic_visibility)
+            else
+                painterResource(id = com.google.android.material.R.drawable.design_ic_visibility_off)
+
+            value = userViewModel.passwordUser.value
+            TextField(
+                value = value,
+                onValueChange = {inputValue ->
+                    userViewModel.onPasswordChanged(inputValue) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusOrder(focusRequester ?: FocusRequester()),
+                leadingIcon = {
+                    if (inputType.icon != null)
+                        Icon(imageVector = inputType.icon, null)
+                },
+                label = { Text(text = inputType.label) },
+                shape = Shapes.small,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                singleLine = true,
+                keyboardOptions = inputType.keyboardOptions,
+                keyboardActions = keyboardActions,
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        Icon(painter = icon, contentDescription = "Visibility Icon")
+                    }
+                },
+                visualTransformation = if (passwordVisibility) VisualTransformation.None
+                else PasswordVisualTransformation()
+            )
+        }
+    }
+}
+
+
+@Composable
 fun TextImput(
     inputType: InputType,
     focusRequester: FocusRequester? = null,
     keyboardActions: KeyboardActions,
-    tournamentViewModel: TournamentViewModel? = null
+    tournamentViewModel: TournamentViewModel? = null,
     ){
-/*
-    var value by remember { mutableStateOf("") }
-
-    if(inputType != InputType.Password) {
-        TextField(
-            value = value,
-            onValueChange = { value = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusOrder(focusRequester ?: FocusRequester()),
-            leadingIcon = {
-                if (inputType.icon != null)
-                    Icon(imageVector = inputType.icon, null)
-            },
-            label = { Text(text = inputType.label) },
-            shape = Shapes.small,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            singleLine = true,
-            keyboardOptions = inputType.keyboardOptions,
-            visualTransformation = inputType.visualTransformation,
-            keyboardActions = keyboardActions
-            )
-    }
-    else{
-        var passwordVisibility by remember { mutableStateOf(false)}
-
-        val icon = if(passwordVisibility)
-            painterResource(id = com.google.android.material.R.drawable.design_ic_visibility)
-        else
-            painterResource(id = com.google.android.material.R.drawable.design_ic_visibility_off)
-
-        TextField(
-            value = value,
-            onValueChange = { value = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusOrder(focusRequester ?: FocusRequester()),
-            leadingIcon = {
-                if (inputType.icon != null)
-                    Icon(imageVector = inputType.icon, null)
-            },
-            label = { Text(text = inputType.label) },
-            shape = Shapes.small,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            singleLine = true,
-            keyboardOptions = inputType.keyboardOptions,
-            keyboardActions = keyboardActions,
-            trailingIcon = {
-                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                    Icon(painter = icon, contentDescription ="Visibility Icon" )
-                }
-            },
-            visualTransformation = if(passwordVisibility) VisualTransformation.None
-            else PasswordVisualTransformation()
-        )
-    }
-    */
-
 
     if(tournamentViewModel != null){
         val value : String
@@ -374,7 +396,449 @@ fun TextImput(
                 Log.d( "InputText", "No coincide el textfield con ningun label")
             }
         }
+    }
+}
+
+@Composable
+fun TextImputSignUp(
+    inputType: InputType,
+    focusRequester: FocusRequester? = null,
+    keyboardActions: KeyboardActions,
+    userViewModel: UserViewModel? = null,
+    playerViewModel: PlayerViewModel? = null,
+    organizatorViewModel : OrganizatorViewModel? = null
+){
+
+    if(userViewModel != null){
+        val value : String
+        when(inputType.label){
+            InputType.Name.label -> {
+
+                value = userViewModel.nameUser.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        userViewModel.onNameChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+
+            }
+            InputType.Apellido.label -> {
+                value = userViewModel.surnameUser.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        userViewModel.onSurnameChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.Telefono.label ->{
+                value = userViewModel.tlfUser.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        userViewModel.onTlfChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.Correo.label ->{
+                value = userViewModel.emailUser.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        userViewModel.onEmailChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.Password.label ->{
+
+                var passwordVisibility by remember { mutableStateOf(false) }
+
+                val icon = if (passwordVisibility)
+                    painterResource(id = com.google.android.material.R.drawable.design_ic_visibility)
+                else
+                    painterResource(id = com.google.android.material.R.drawable.design_ic_visibility_off)
+
+                value = userViewModel.passwordUser.value
+                TextField(
+                    value = value,
+                    onValueChange = {inputValue ->
+                        userViewModel.onPasswordChanged(inputValue) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    keyboardActions = keyboardActions,
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(painter = icon, contentDescription = "Visibility Icon")
+                        }
+                    },
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None
+                    else PasswordVisualTransformation()
+                )
+            }
+            InputType.Correo.label ->{
+                value = userViewModel.emailUser.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        userViewModel.onEmailChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.Nickname.label ->{
+                if (playerViewModel != null) {
+                    value = playerViewModel.nickname.value
+
+                    TextField(
+                        value = value,
+                        onValueChange = { inputValue ->
+                            playerViewModel.onNicknameChanged(inputValue)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusOrder(focusRequester ?: FocusRequester()),
+                        leadingIcon = {
+                            if (inputType.icon != null)
+                                Icon(imageVector = inputType.icon, null)
+                        },
+                        label = { Text(text = inputType.label) },
+                        shape = Shapes.small,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        singleLine = true,
+                        keyboardOptions = inputType.keyboardOptions,
+                        visualTransformation = inputType.visualTransformation,
+                        keyboardActions = keyboardActions
+                    )
+                }
+            }
+            InputType.BankAccount.label -> {
+
+                if (organizatorViewModel != null) {
+                    value = organizatorViewModel.bankAccount.value
 
 
+                    TextField(
+                        value = value,
+                        onValueChange = { inputValue ->
+                            organizatorViewModel.onBankAccountChanged(inputValue)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusOrder(focusRequester ?: FocusRequester()),
+                        leadingIcon = {
+                            if (inputType.icon != null)
+                                Icon(imageVector = inputType.icon, null)
+                        },
+                        label = { Text(text = inputType.label) },
+                        shape = Shapes.small,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        singleLine = true,
+                        keyboardOptions = inputType.keyboardOptions,
+                        visualTransformation = inputType.visualTransformation,
+                        keyboardActions = keyboardActions
+                    )
+                }
+
+            }
+            InputType.Cif.label -> {
+                if (organizatorViewModel != null) {
+                    value = organizatorViewModel.cif.value
+
+
+                    TextField(
+                        value = value,
+                        onValueChange = { inputValue ->
+                            organizatorViewModel.onCifChanged(inputValue)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusOrder(focusRequester ?: FocusRequester()),
+                        leadingIcon = {
+                            if (inputType.icon != null)
+                                Icon(imageVector = inputType.icon, null)
+                        },
+                        label = { Text(text = inputType.label) },
+                        shape = Shapes.small,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        singleLine = true,
+                        keyboardOptions = inputType.keyboardOptions,
+                        visualTransformation = inputType.visualTransformation,
+                        keyboardActions = keyboardActions
+                    )
+                }
+            }
+            InputType.ClubName.label ->{
+                if (organizatorViewModel != null) {
+                    value = organizatorViewModel.clubName.value
+
+
+                    TextField(
+                        value = value,
+                        onValueChange = { inputValue ->
+                            organizatorViewModel.onClubNameChanged(inputValue)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusOrder(focusRequester ?: FocusRequester()),
+                        leadingIcon = {
+                            if (inputType.icon != null)
+                                Icon(imageVector = inputType.icon, null)
+                        },
+                        label = { Text(text = inputType.label) },
+                        shape = Shapes.small,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        singleLine = true,
+                        keyboardOptions = inputType.keyboardOptions,
+                        visualTransformation = inputType.visualTransformation,
+                        keyboardActions = keyboardActions
+                    )
+                }
+            }
+            else -> {
+                Log.d( "InputText", "No coincide el textfield con ningun label")
+            }
+        }
+    }
+}
+
+@Composable
+fun TextImputOrganizator(
+    inputType: InputType,
+    focusRequester: FocusRequester? = null,
+    keyboardActions: KeyboardActions,
+    organizatorViewModel: OrganizatorViewModel? = null
+){
+
+    if(organizatorViewModel != null){
+        val value : String
+        when(inputType.label){
+            InputType.BankAccount.label -> {
+
+                value = organizatorViewModel.bankAccount.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        organizatorViewModel.onBankAccountChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+
+            }
+            InputType.Cif.label -> {
+                value = organizatorViewModel.cif.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        organizatorViewModel.onCifChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.ClubName.label ->{
+                value = organizatorViewModel.clubName.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        organizatorViewModel.onClubNameChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            else -> {
+                Log.d( "InputText", "No coincide el textfield con ningun label")
+            }
+        }
     }
 }

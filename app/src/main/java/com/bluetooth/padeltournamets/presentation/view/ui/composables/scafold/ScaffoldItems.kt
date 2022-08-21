@@ -1,4 +1,4 @@
-package com.bluetooth.padeltournamets.presentation.view.ui.composables
+package com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -17,20 +17,24 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.BottomNavGraph
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.GreenTenis
-import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
-import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
+import com.bluetooth.padeltournamets.presentation.viewmodel.*
 
 
 @Composable
 fun ScaffoldScreen(navController: NavHostController,
                    searchViewModel : SearchViewModel = hiltViewModel(),
-                   tournamentViewModel : TournamentViewModel)
+                   tournamentViewModel : TournamentViewModel,
+                   userViewModel : UserViewModel,
+                   playerViewModel: PlayerViewModel,
+                   organizatorViewModel: OrganizatorViewModel
+                   )
 {
     Scaffold(
-        content = {BottomNavGraph(navController = navController, searchViewModel, tournamentViewModel)},
-        floatingActionButton = {FAB(navController = navController)},
+        content = {BottomNavGraph(navController = navController, searchViewModel, tournamentViewModel,
+            userViewModel, playerViewModel, organizatorViewModel)},
+        //floatingActionButton = {FAB(navController = navController)},
         bottomBar = { BottomBar(navController = navController,) }
     )
 }

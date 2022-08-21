@@ -28,6 +28,7 @@ import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.PickImageFromGallery
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.showDatePicker
+import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
@@ -40,7 +41,9 @@ import com.bluetooth.padeltournamets.utilities.FIN_TORNEO
 
 @Composable
 fun CreateTournament(context : Context, navController: NavController,
-                     tournamentViewModel : TournamentViewModel){
+                     tournamentViewModel : TournamentViewModel,
+                    organizatorViewModel: OrganizatorViewModel
+){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
 
@@ -138,7 +141,7 @@ fun CreateTournament(context : Context, navController: NavController,
                     fechaFin = tournamentViewModel.dateFin.value,
                     cartel = tournamentViewModel.cartel.value,
                     fechaLimiteInscripcion = tournamentViewModel.dateLimit.value,
-                    )
+                )
                 tournamentViewModel.insertTournament(tournament)
                 Log.d("CreatePreNav", tournamentViewModel.getAllTournaments.toString())
                 navController.navigate(BottomBarScreen.Home.route)

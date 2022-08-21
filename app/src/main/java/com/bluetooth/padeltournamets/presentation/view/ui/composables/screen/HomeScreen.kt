@@ -15,11 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.bluetooth.padeltournamets.model.entities.TournamentEntity
-import com.bluetooth.padeltournamets.presentation.view.ui.composables.TopBar
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.TopBar
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
-import com.bluetooth.padeltournamets.presentation.viewmodel.UsuarioViewModel
 import com.valentinilk.shimmer.shimmer
 
 @Composable
