@@ -23,4 +23,10 @@ interface UserDao {
     @Delete
     suspend fun deleteUser(userEntity: UserEntity)
 
+    @Query("SELECT id FROM user WHERE email = :mail")
+    fun getIdByMail(mail: String) : Int
+
+    @Query("SELECT * FROM user WHERE email = :mail AND password = :pass")
+    suspend fun getUserByCredentials(mail: String, pass: String) : UserEntity
+
 }

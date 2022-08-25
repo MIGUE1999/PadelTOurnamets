@@ -69,9 +69,13 @@ fun Login(userViewModel: UserViewModel, navController: NavController){
                     userViewModel = userViewModel
                 )
 
-                Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
-                    Text("SIGN IN", Modifier.padding(vertical = 8.dp))
-                }
+                Button(onClick = {
+                                    //userViewModel.checkLoginCredentials()
+                                    navController.navigate(BottomBarScreen.Home.route)
+                                 },
+                    modifier = Modifier.fillMaxWidth()) {
+                        Text("Iniciar Sesion", Modifier.padding(vertical = 8.dp))
+                    }
                 Divider(
                     color = Color.White.copy(alpha = 0.3f),
                     thickness = 1.dp,
@@ -80,7 +84,7 @@ fun Login(userViewModel: UserViewModel, navController: NavController){
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Don't have an account?", color = Color.White)
                     TextButton(onClick = { navController.navigate(BottomBarScreen.SignUp.route) }) {
-                        Text("SING UP")
+                        Text("Registrate")
                     }
                 }
             }

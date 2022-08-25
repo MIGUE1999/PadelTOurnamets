@@ -35,9 +35,14 @@ fun ScaffoldScreen(navController: NavHostController,
         content = {BottomNavGraph(navController = navController, searchViewModel, tournamentViewModel,
             userViewModel, playerViewModel, organizatorViewModel)},
         //floatingActionButton = {FAB(navController = navController)},
-        bottomBar = { BottomBar(navController = navController,) }
+        //bottomBar = { BottomBar(navController = navController,) }
     )
+
 }
+
+
+
+
 
 @Composable
 fun TopBar(){

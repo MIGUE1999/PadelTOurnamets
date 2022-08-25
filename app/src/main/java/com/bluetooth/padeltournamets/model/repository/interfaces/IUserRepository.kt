@@ -9,6 +9,10 @@ interface IUserRepository {
 
     fun getAllUsers(): LiveData<List<UserEntity>>
 
+    fun getIdByMail(mail: String) : Int
+
+    suspend fun getUserByCredentials(mail: String, pass: String) : UserEntity
+
     suspend fun insertUser(usr: UserEntity)
 
     suspend fun deleteUser(usr: UserEntity)

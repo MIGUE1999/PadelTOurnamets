@@ -15,7 +15,13 @@ class UserRepositoryImpl @Inject constructor(private val userDao : UserDao) : IU
         return userDao.getAllUsers()
     }
 
-    override suspend fun insertUser(usr: UserEntity) {
+    override fun getIdByMail(mail: String) = userDao.getIdByMail(mail)
+
+    override suspend fun getUserByCredentials(mail: String, pass: String): UserEntity {
+        return userDao.getUserByCredentials(mail, pass)
+    }
+
+    override suspend fun insertUser(usr: UserEntity){
         return userDao.insertUser(usr)
     }
 

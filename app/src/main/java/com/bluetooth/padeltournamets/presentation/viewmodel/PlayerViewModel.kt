@@ -35,7 +35,6 @@ class PlayerViewModel @Inject constructor(
     fun insertPlayer(player : PlayerEntity){
         viewModelScope.launch(Dispatchers.IO) {
             playerRepository.insertPlayer(player)
-            delay(3000)
         }
     }
 

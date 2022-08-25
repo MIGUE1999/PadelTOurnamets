@@ -32,7 +32,6 @@ class OrganizatorViewModel @Inject constructor(
     fun insertOrganizator(organizator : OrganizatorEntity){
         viewModelScope.launch(Dispatchers.IO) {
             organizatorRepository.insertOrganizator(organizator)
-            delay(3000)
         }
     }
 

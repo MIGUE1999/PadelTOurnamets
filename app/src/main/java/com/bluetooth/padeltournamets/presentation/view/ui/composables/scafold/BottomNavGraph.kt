@@ -1,11 +1,13 @@
 package com.bluetooth.padeltournamets.presentation.view.ui.composables
 
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBar
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.*
 import com.bluetooth.padeltournamets.presentation.viewmodel.*
@@ -24,16 +26,34 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
         startDestination = BottomBarScreen.LogIn.route
     ) {
         composable(route = BottomBarScreen.Search.route) {
-            SearchScreen(searchViewModel, tournamentViewModel)
+            Scaffold(
+                content = {SearchScreen(searchViewModel, tournamentViewModel)},
+                //floatingActionButton = {FAB(navController = navController)},
+                bottomBar = { BottomBar(navController = navController,) }
+            )
         }
         composable(route = BottomBarScreen.Home.route) {
-            HomeScreen(tournamentViewModel)
+            Scaffold(
+                content = { HomeScreen(tournamentViewModel)},
+                //floatingActionButton = {FAB(navController = navController)},
+                bottomBar = { BottomBar(navController = navController,) }
+            )
+
         }
         composable(route = BottomBarScreen.Profile.route) {
-            ProfileScreen(Rol.organizador)
+            Scaffold(
+                content = { ProfileScreen(Rol.organizador) },
+                //floatingActionButton = {FAB(navController = navController)},
+                bottomBar = { BottomBar(navController = navController,) }
+            )
         }
         composable(route = BottomBarScreen.CreateTournament.route) {
-            CreateTournament(context = context, navController, tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel)
+            Scaffold(
+                content = {CreateTournament(context = context, navController, tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel)},
+                //floatingActionButton = {FAB(navController = navController)},
+                bottomBar = { BottomBar(navController = navController,) }
+            )
+
         }
         composable(route = BottomBarScreen.LogIn.route) {
             Login(userViewModel, navController)
