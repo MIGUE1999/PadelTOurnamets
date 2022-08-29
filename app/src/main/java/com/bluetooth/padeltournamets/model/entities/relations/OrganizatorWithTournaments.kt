@@ -14,6 +14,5 @@ data class OrganizatorWithTournaments (
         entityColumn = "idOrganizator"
     )
     val tournaments : List<TournamentEntity>
-
-        )
+)
 

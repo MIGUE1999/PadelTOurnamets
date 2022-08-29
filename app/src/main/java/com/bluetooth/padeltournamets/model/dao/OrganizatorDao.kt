@@ -23,6 +23,10 @@ interface OrganizatorDao {
     @Delete
     suspend fun deleteOrganizator(organizadorModel: OrganizatorEntity)
 
+    @Transaction
+    @Query("SELECT * FROM organizador")
+    fun getorganizatorWithTournaments() : LiveData<List<OrganizatorWithTournaments>>
+
     /*
     @Transaction
     @Query("SELECT * FROM organizador WHERE id = :idOrganizator")

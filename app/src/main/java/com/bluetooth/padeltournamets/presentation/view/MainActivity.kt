@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.ScaffoldScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.PadelTOurnametsTheme
 import com.bluetooth.padeltournamets.presentation.viewmodel.*
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,10 +25,14 @@ class MainActivity: ComponentActivity() {
     private val playerViewModel : PlayerViewModel by viewModels()
     private val organizatorViewModel : OrganizatorViewModel by viewModels()
 
+    lateinit var session: LoginPref
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
+        session = LoginPref(this)
+
+
         setContent {
             PadelTOurnametsTheme {
                 // A surface container using the 'background' color from the theme
@@ -42,7 +47,7 @@ class MainActivity: ComponentActivity() {
                  */
                 navController = rememberNavController()
                 ScaffoldScreen(navController = navController, searchViewModel , tournamentViewModel,
-                    userViewModel, playerViewModel, organizatorViewModel )
+                    userViewModel, playerViewModel, organizatorViewModel, session )
 
             }
         }

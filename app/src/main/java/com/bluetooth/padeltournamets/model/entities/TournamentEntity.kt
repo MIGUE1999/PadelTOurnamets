@@ -21,6 +21,7 @@ data class TournamentEntity(
     val fechaLimiteInscripcion : String,
     val premio: String,
     val cartel: Bitmap?,
-    //val idOrganizator : Int
+
+    val idOrganizator : Int
     //idReserva
 )

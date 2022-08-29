@@ -1,6 +1,7 @@
 package com.bluetooth.padeltournamets.presentation.view.ui.composables.screen
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,32 +24,40 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.bluetooth.padeltournamets.R.drawable.ic_baseline_emoji_emotions_24
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.TopBar
+import com.bluetooth.padeltournamets.presentation.viewmodel.UserViewModel
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 
 
 @Composable
-fun ProfileScreen(rol : String){
+fun ProfileScreen(session: LoginPref, navController: NavController,userViewModel:UserViewModel){
     Scaffold(topBar = { TopBar() }) {
-        if (rol == Rol.jugador) {
+
+
+
+        if(session.getUserDetails().get(LoginPref.KEY_ROL) == Rol.jugador){
             Column(modifier = Modifier.padding(bottom = 40.dp)) {
-                TopProfileCard()
+                TopProfileCard(session, navController, userViewModel)
                 ProfilePlayerData()
             }
-        } else {
+        }
+        else {
             Column(modifier = Modifier.padding(bottom = 40.dp)) {
-                TopProfileCard()
+                TopProfileCard(session, navController,userViewModel)
                 ProfileOrganizatorData()
             }
-
         }
+
     }
 }
 
 @Composable
-fun TopProfileCard(){
+fun TopProfileCard(session: LoginPref, navController: NavController, userViewModel: UserViewModel){
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 1.dp,
@@ -59,11 +70,23 @@ fun TopProfileCard(){
     ) {
         Row(modifier = Modifier.padding(8.dp),
         verticalAlignment = Alignment.CenterVertically){
+
+            /*
             Image( painter = painterResource(id = ic_baseline_emoji_emotions_24),
                 modifier = Modifier
                     .border(width = 80.dp, shape = CircleShape, color = Color.Transparent)
                     .size(60.dp),
                 contentDescription = "Profile Photo")
+
+              */
+
+            IconButton(onClick = {
+                Log.d("PROFILE SCREEN", "Id: " + session.getUserDetails().get(LoginPref.KEY_ID))
+                session.LogoutUser(userViewModel)
+                navController.navigate(BottomBarScreen.LogIn.route)
+            }) {
+                Icon(Icons.Filled.ExitToApp, null)
+            }
 
             Spacer()
 
@@ -75,6 +98,7 @@ fun TopProfileCard(){
                     modifier = Modifier
                         .wrapContentHeight() )
             }
+            Spacer(modifier = Modifier.size(10.dp))
         }
     }
 }
@@ -185,4 +209,8 @@ fun ProfileOrganizatorData(){
         }
     }
 }
+
+
+
+
 

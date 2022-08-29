@@ -20,13 +20,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.TournamentList
 import com.bluetooth.padeltournamets.presentation.view.ui.recipeList.FoodCategory
 import com.bluetooth.padeltournamets.presentation.view.ui.recipeList.getAllFoodCategories
+import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 
 @Composable
 fun SearchScreen(mainViewModel: SearchViewModel,
-                 tournamentViewModel: TournamentViewModel
+                 tournamentViewModel: TournamentViewModel,
+                 organizatorViewModel: OrganizatorViewModel
                  ) {
 
     //val tournamentViewModel = hiltViewModel<TournamentViewModel>()
@@ -51,7 +53,7 @@ fun SearchScreen(mainViewModel: SearchViewModel,
                     SearcherBar()
                 }
                 CategoryFilter(selectedCategory = selectedCategory)
-                TournamentList(tournamentViewModel = tournamentViewModel)
+                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel)
             }
         }
     }

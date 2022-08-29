@@ -15,22 +15,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.FAB
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.TopBar
+import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun HomeScreen(
-    //usuarioViewModel: UsuarioViewModel = hiltViewModel(),
-    tournamentViewModel: TournamentViewModel
+    organizatorViewModel: OrganizatorViewModel,
+    tournamentViewModel: TournamentViewModel,
+    session : LoginPref,
+    //navController: NavController
 ) {
-    val numbers = listOf(1, 2, 3, 4, 5, 6)
-    //val tournamentViewModel = hiltViewModel<TournamentViewModel>()
 
-    Scaffold(topBar = { TopBar() }) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Tus Torneos", color = Color.White, style = MaterialTheme.typography.h3)
-            TournamentList(tournamentViewModel = tournamentViewModel )
+    if(session.getUserDetails().get(LoginPref.KEY_ROL) == Rol.jugador)
+        Scaffold(topBar = { TopBar()}) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Tus Torneos", color = Color.White, style = MaterialTheme.typography.h3)
+                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel )
+            }
+        }
+    else {
+        Scaffold(topBar = { TopBar() }) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Button(onClick = {
+                    //navController.navigate(BottomBarScreen.CreateTournament.route)
+                }) {
+                    Text(text = "Crear Torneo", color = Color.White, style = MaterialTheme.typography.h3)
+                }
+            }
         }
     }
 
@@ -50,16 +67,25 @@ fun HomeScreen(
 }
 
 @Composable
-fun TournamentList(tournamentViewModel : TournamentViewModel)
+fun TournamentList(tournamentViewModel : TournamentViewModel, organizatorViewModel: OrganizatorViewModel)
 {
     val tournaments by tournamentViewModel.getAllTournaments.observeAsState(arrayListOf())
+    val orgTournaments by organizatorViewModel.getAllOrganizatorWithTournaments.observeAsState(arrayListOf())
 
+    Log.d("HomeScreen:", "Numero torneos: " + orgTournaments.size)
+    LazyColumn() {
+        items(items = orgTournaments) { tournament ->
+            Log.d("HomeScreen:", "Organizador Torneo: " + tournament.organizator.clubName)
+        }
+    }
+/*
     Log.d("HomeScreen:", "Numero torneos: " + tournaments.size)
     LazyColumn() {
             items(items = tournaments) { tournament ->
                 TournamentCard(isOrganizador = true, tournament, tournamentViewModel)
             }
     }
+    */
 }
 
 

@@ -2,9 +2,13 @@ package com.bluetooth.padeltournamets.presentation.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
+import com.bluetooth.padeltournamets.model.entities.TournamentEntity
+import com.bluetooth.padeltournamets.model.entities.UserEntity
+import com.bluetooth.padeltournamets.model.entities.relations.OrganizatorWithTournaments
 import com.bluetooth.padeltournamets.model.repository.interfaces.IOrganizatorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +24,10 @@ class OrganizatorViewModel @Inject constructor(
     val cif = mutableStateOf("")
     val clubName = mutableStateOf("")
     val bankAccount = mutableStateOf("")
+
+    val getAllOrganizatorWithTournaments : LiveData<List<OrganizatorWithTournaments>> by lazy {
+        organizatorRepository.getOrganizatorWithTournaments()
+    }
 
     val getAllOrganizators : LiveData<List<OrganizatorEntity>> by lazy {
         organizatorRepository.getAllOrganizators()

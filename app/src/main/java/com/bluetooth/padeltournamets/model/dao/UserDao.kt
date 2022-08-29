@@ -29,4 +29,6 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE email = :mail AND password = :pass")
     suspend fun getUserByCredentials(mail: String, pass: String) : UserEntity
 
+
+
 }

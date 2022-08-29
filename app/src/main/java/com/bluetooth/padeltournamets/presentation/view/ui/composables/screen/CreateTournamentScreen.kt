@@ -34,15 +34,14 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.bluetooth.padeltournamets.utilities.INICIO_TORNEO
 import com.bluetooth.padeltournamets.utilities.FIN_TORNEO
-
-
-
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 
 
 @Composable
 fun CreateTournament(context : Context, navController: NavController,
                      tournamentViewModel : TournamentViewModel,
-                    organizatorViewModel: OrganizatorViewModel
+                    organizatorViewModel: OrganizatorViewModel,
+                     session : LoginPref
 ){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
@@ -133,6 +132,10 @@ fun CreateTournament(context : Context, navController: NavController,
             PickImageFromGallery(tournamentViewModel)
 
             Button(onClick = {
+                var idUsr = 0
+                session.getUserDetails().get(LoginPref.KEY_ID)?.let {
+                    idUsr = session.getUserDetails().get(LoginPref.KEY_ID)!!.toInt()
+                }
                 var tournament = TournamentEntity(nombre = tournamentViewModel.nameTournament.value,
                     precioInscripcion = tournamentViewModel.inscriptionCost.value,
                     premio = tournamentViewModel.priceTournament.value,
@@ -141,7 +144,9 @@ fun CreateTournament(context : Context, navController: NavController,
                     fechaFin = tournamentViewModel.dateFin.value,
                     cartel = tournamentViewModel.cartel.value,
                     fechaLimiteInscripcion = tournamentViewModel.dateLimit.value,
+                    idOrganizator = idUsr
                 )
+                Log.d("CREATETOURNAMENT","ID USUARIO: $idUsr" )
                 tournamentViewModel.insertTournament(tournament)
                 Log.d("CreatePreNav", tournamentViewModel.getAllTournaments.toString())
                 navController.navigate(BottomBarScreen.Home.route)

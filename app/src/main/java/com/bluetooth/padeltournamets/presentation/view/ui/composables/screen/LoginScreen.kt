@@ -39,6 +39,7 @@ import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.PlayerViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.UserViewModel
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.GlobalScope
@@ -48,7 +49,7 @@ import okhttp3.internal.wait
 
 
 @Composable
-fun Login(userViewModel: UserViewModel, navController: NavController){
+fun Login(userViewModel: UserViewModel, navController: NavController,session : LoginPref){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
 
@@ -83,7 +84,7 @@ fun Login(userViewModel: UserViewModel, navController: NavController){
                 userViewModel.usr.observe(lifecycleOwner) { user ->
                     if(user != null) {
                         Log.d("MAIN", "ENTRA ${user.email}")
-
+                        session.createLoginSession(user.id,user.nombre, user.email, user.rol)
                         navController.navigate(BottomBarScreen.Home.route)
                     } else Log.d("MAIN", "NO ENTRA")
                 }

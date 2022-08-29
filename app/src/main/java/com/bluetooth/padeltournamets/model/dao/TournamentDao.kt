@@ -28,4 +28,6 @@ interface TournamentDao  {
 
     @Delete
     suspend fun deleteTournaments(tournamentEntities: List<TournamentEntity>)
+
+
 }

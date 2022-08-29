@@ -11,6 +11,8 @@ import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.Bo
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.*
 import com.bluetooth.padeltournamets.presentation.viewmodel.*
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
+import kotlinx.coroutines.delay
 
 //Es el que muestra la pantalla en el scaffold: content = {BottomNavGraph(navController = navController)},
 @Composable
@@ -18,23 +20,36 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
                    tournamentViewModel : TournamentViewModel,
                    userViewModel: UserViewModel,
                    playerViewModel: PlayerViewModel,
-                   organizatorViewModel : OrganizatorViewModel
+                   organizatorViewModel : OrganizatorViewModel,
+                   session : LoginPref
                    ) {
     val context = LocalContext.current
+
+    var startDestination = if(session.isLoggedIn())
+        BottomBarScreen.Home.route
+    else
+        BottomBarScreen.LogIn.route
+
+
+
     NavHost(
         navController = navController,
-        startDestination = BottomBarScreen.LogIn.route
+        startDestination = startDestination
     ) {
         composable(route = BottomBarScreen.Search.route) {
             Scaffold(
-                content = {SearchScreen(searchViewModel, tournamentViewModel)},
+                content = {SearchScreen(searchViewModel, tournamentViewModel, organizatorViewModel = organizatorViewModel)},
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
         }
         composable(route = BottomBarScreen.Home.route) {
             Scaffold(
-                content = { HomeScreen(tournamentViewModel)},
+                content = { HomeScreen(tournamentViewModel = tournamentViewModel,
+                                        organizatorViewModel= organizatorViewModel,
+                                        session = session //navController = navController
+                                        )
+                          },
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
@@ -42,21 +57,22 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
         }
         composable(route = BottomBarScreen.Profile.route) {
             Scaffold(
-                content = { ProfileScreen(Rol.organizador) },
+                content = { ProfileScreen(session,navController,userViewModel) },
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
         }
         composable(route = BottomBarScreen.CreateTournament.route) {
             Scaffold(
-                content = {CreateTournament(context = context, navController, tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel)},
+                content = {CreateTournament(context = context, navController,
+                                            tournamentViewModel = tournamentViewModel,
+                                            organizatorViewModel = organizatorViewModel, session)},
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
-
         }
         composable(route = BottomBarScreen.LogIn.route) {
-            Login(userViewModel, navController)
+            Login(userViewModel, navController,session)
         }
         composable(route = BottomBarScreen.SignUp.route) {
             SignUp(userViewModel = userViewModel, navController, playerViewModel,
