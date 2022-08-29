@@ -28,8 +28,12 @@ class UserViewModel @Inject constructor(
     val surnameUser = mutableStateOf("")
     val passwordUser = mutableStateOf("")
     val tlfUser = mutableStateOf("")
-    val returnedUserId = MutableLiveData<Int>()
     var idUsr = 0
+
+    val _usr = MutableLiveData<UserEntity>()
+    val usr: LiveData<UserEntity>
+        get() = _usr
+
 
     val getAllUsers : LiveData<List<UserEntity>> by lazy {
         userRepository.getAllUsers()
@@ -82,37 +86,27 @@ class UserViewModel @Inject constructor(
     fun insertPlayerByMail(mail:String, playerViewModel: PlayerViewModel){
         viewModelScope.launch(Dispatchers.IO) {
             idUsr = userRepository.getIdByMail(mail)
-            Log.d("PRUEBA", "IdAntes: ${idUsr}")
             var player = PlayerEntity(nickname = playerViewModel.nickname.value, userId = idUsr )
-            Log.d("PRUEBA", "NickAntes: ${player.nickname}")
-            Log.d("PRUEBA", "UserIdAntes: ${player.userId}")
-
             playerViewModel.insertPlayer(player)
         }
-        Log.d("PRUEBA", "IdDespues: ${idUsr}")
     }
 
     fun insertOrganizatorByMail(mail:String, organizatorViewModel: OrganizatorViewModel){
         viewModelScope.launch(Dispatchers.IO) {
             idUsr = userRepository.getIdByMail(mail)
             var organizator = OrganizatorEntity(cif = organizatorViewModel.cif.value ,
-                clubName=organizatorViewModel.clubName.value,
-                bankAccount= organizatorViewModel.bankAccount.value, userId = idUsr )
+                                                clubName=organizatorViewModel.clubName.value,
+                                                bankAccount= organizatorViewModel.bankAccount.value,
+                                                userId = idUsr )
             organizatorViewModel.insertOrganizator(organizator)
         }
     }
 
-    fun checkLoginCredentials() {
-        viewModelScope.launch{
-            var usr = userRepository.getUserByCredentials(emailUser.value, passwordUser.value)
-            if(usr == null)
-                Log.d("PRUEBA", "NULO")
-            else{
-            Log.d("PRUEBA", usr.email)
-            Log.d("PRUEBA", usr.password)
-            Log.d("PRUEBA", usr.rol)
-                }
-        }
+     fun checkLoginCredentials() {
+            viewModelScope.launch(Dispatchers.IO) {
+                val usrPrueba = userRepository.getUserByCredentials(emailUser.value, passwordUser.value)
+                _usr.postValue(usrPrueba)
+            }
     }
 
 }

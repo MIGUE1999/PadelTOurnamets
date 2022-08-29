@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -28,7 +30,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import com.bluetooth.padeltournamets.model.entities.UserEntity
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.Shapes
 import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
@@ -37,6 +41,10 @@ import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.UserViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
 
 @Composable
@@ -64,15 +72,25 @@ fun Login(userViewModel: UserViewModel, navController: NavController){
                 }), userViewModel = userViewModel)
 
                 TextImputLogin(InputType.Password, keyboardActions = KeyboardActions(onDone = {
+                    userViewModel.checkLoginCredentials()
                     focusManager.clearFocus()
                 }), focusRequester = passwordFocusRequester,
                     userViewModel = userViewModel
                 )
 
+                val lifecycleOwner = LocalLifecycleOwner.current
+
+                userViewModel.usr.observe(lifecycleOwner) { user ->
+                    if(user != null) {
+                        Log.d("MAIN", "ENTRA ${user.email}")
+
+                        navController.navigate(BottomBarScreen.Home.route)
+                    } else Log.d("MAIN", "NO ENTRA")
+                }
+
                 Button(onClick = {
-                                    //userViewModel.checkLoginCredentials()
-                                    navController.navigate(BottomBarScreen.Home.route)
-                                 },
+                                 userViewModel.checkLoginCredentials()
+                },
                     modifier = Modifier.fillMaxWidth()) {
                         Text("Iniciar Sesion", Modifier.padding(vertical = 8.dp))
                     }
