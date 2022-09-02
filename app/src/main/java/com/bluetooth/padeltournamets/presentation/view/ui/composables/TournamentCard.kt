@@ -13,12 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.bluetooth.padeltournamets.R
 import com.bluetooth.padeltournamets.model.entities.TournamentEntity
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 @Composable
-fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tournamentViewModel: TournamentViewModel){
+fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tournamentViewModel: TournamentViewModel,
+                   navController: NavController
+){
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 1.dp,
@@ -26,7 +30,7 @@ fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tourn
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .fillMaxWidth()
     ){
-        Spacer()
+        //Spacer()
         Row(modifier= Modifier.padding(8.dp)){
             Box(modifier = Modifier.size(120.dp)) {
                 Image(
@@ -39,7 +43,7 @@ fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tourn
                         .background(color = Color.Blue)
                 )
             }
-            Spacer()
+            //Spacer()
             Column(
                 Modifier.weight(1f),
             ){
@@ -49,9 +53,12 @@ fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tourn
                 Text("Categoria")
                 Text("Premio")
             }
-            Spacer()
+            //Spacer()
             if(isOrganizador) {
                 IconButton(onClick = {
+                    tournamentViewModel.onActualTournamentChanged(tournament)
+                    tournamentViewModel.getTournamentAtributes(tournament)
+                    navController.navigate(BottomBarScreen.EditTournament.route)
                 }) {
                     Icon(Icons.Filled.Edit, "EditTournament")
                 }

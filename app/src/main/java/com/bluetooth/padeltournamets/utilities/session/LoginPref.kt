@@ -2,6 +2,7 @@ package com.bluetooth.padeltournamets.utilities.session
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.UserViewModel
 
 class LoginPref {
@@ -23,8 +24,6 @@ class LoginPref {
         val KEY_USERNAME = "username"
         val KEY_EMAIL = "email"
         val KEY_ROL = "rol"
-
-
     }
 
     fun createLoginSession(id:Int, username:String, email:String, rol : String){
@@ -50,7 +49,6 @@ class LoginPref {
         editor.clear()
         editor.commit()
         userViewModel._usr.value=null
-
     }
 
     fun isLoggedIn():Boolean{

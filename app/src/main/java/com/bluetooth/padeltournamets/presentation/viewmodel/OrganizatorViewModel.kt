@@ -1,5 +1,6 @@
 package com.bluetooth.padeltournamets.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +25,11 @@ class OrganizatorViewModel @Inject constructor(
     val cif = mutableStateOf("")
     val clubName = mutableStateOf("")
     val bankAccount = mutableStateOf("")
+
+
+    val _org = MutableLiveData<OrganizatorEntity>()
+    val org: LiveData<OrganizatorEntity>
+        get() = _org
 
     val getAllOrganizatorWithTournaments : LiveData<List<OrganizatorWithTournaments>> by lazy {
         organizatorRepository.getOrganizatorWithTournaments()
@@ -65,6 +71,16 @@ class OrganizatorViewModel @Inject constructor(
 
     fun onBankAccountChanged(bankAcc:String){
         bankAccount.value = bankAcc
+    }
+
+
+
+    fun getOrganizatorByUserId(userId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val usrPrueba = organizatorRepository.getOrganizatorByUserId(userId)
+            Log.d("OrgViewModel", "Organizator: " + usrPrueba.id + usrPrueba.clubName)
+            _org.postValue(usrPrueba)
+        }
     }
 
 }

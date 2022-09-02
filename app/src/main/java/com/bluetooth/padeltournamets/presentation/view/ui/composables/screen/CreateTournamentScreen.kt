@@ -20,6 +20,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,7 +41,7 @@ import com.bluetooth.padeltournamets.utilities.session.LoginPref
 @Composable
 fun CreateTournament(context : Context, navController: NavController,
                      tournamentViewModel : TournamentViewModel,
-                    organizatorViewModel: OrganizatorViewModel,
+                     organizatorViewModel: OrganizatorViewModel,
                      session : LoginPref
 ){
     val passwordFocusRequester = FocusRequester()
@@ -131,11 +132,22 @@ fun CreateTournament(context : Context, navController: NavController,
 
             PickImageFromGallery(tournamentViewModel)
 
+            val lifecycleOwner = LocalLifecycleOwner.current
+            var idOrg = 0
+
+            organizatorViewModel.org.observe(lifecycleOwner) { organizator ->
+                if(organizator != null) {
+                    idOrg = organizator.id
+                } else Log.d("MAIN", "NO ENTRA")
+            }
+
             Button(onClick = {
-                var idUsr = 0
+                /*
+                var idOrg = 0
                 session.getUserDetails().get(LoginPref.KEY_ID)?.let {
-                    idUsr = session.getUserDetails().get(LoginPref.KEY_ID)!!.toInt()
+                    idOrg = session.getUserDetails().get(LoginPref.KEY_ID)!!.toInt()
                 }
+                */
                 var tournament = TournamentEntity(nombre = tournamentViewModel.nameTournament.value,
                     precioInscripcion = tournamentViewModel.inscriptionCost.value,
                     premio = tournamentViewModel.priceTournament.value,
@@ -144,9 +156,9 @@ fun CreateTournament(context : Context, navController: NavController,
                     fechaFin = tournamentViewModel.dateFin.value,
                     cartel = tournamentViewModel.cartel.value,
                     fechaLimiteInscripcion = tournamentViewModel.dateLimit.value,
-                    idOrganizator = idUsr
+                    idOrganizator = idOrg
                 )
-                Log.d("CREATETOURNAMENT","ID USUARIO: $idUsr" )
+                Log.d("CREATETOURNAMENT","ID USUARIO: $idOrg" )
                 tournamentViewModel.insertTournament(tournament)
                 Log.d("CreatePreNav", tournamentViewModel.getAllTournaments.toString())
                 navController.navigate(BottomBarScreen.Home.route)
@@ -154,7 +166,6 @@ fun CreateTournament(context : Context, navController: NavController,
             }, modifier = Modifier.fillMaxWidth().padding(5.dp)) {
                 Text(text = "Crear Torneo")
             }
-
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.bluetooth.padeltournamets.presentation.view.ui.composables
 
+import android.util.LogPrinter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -17,18 +18,23 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.Rol
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.TournamentList
 import com.bluetooth.padeltournamets.presentation.view.ui.recipeList.FoodCategory
 import com.bluetooth.padeltournamets.presentation.view.ui.recipeList.getAllFoodCategories
 import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.SearchViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 
 
 @Composable
 fun SearchScreen(mainViewModel: SearchViewModel,
                  tournamentViewModel: TournamentViewModel,
-                 organizatorViewModel: OrganizatorViewModel
+                 organizatorViewModel: OrganizatorViewModel,
+                 session:LoginPref,
+                 navController:NavController
                  ) {
 
     //val tournamentViewModel = hiltViewModel<TournamentViewModel>()
@@ -41,7 +47,8 @@ fun SearchScreen(mainViewModel: SearchViewModel,
     {
         Surface(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .fillMaxHeight(0.925f),
             color = Color.White,
             elevation = 8.dp,
 
@@ -53,7 +60,12 @@ fun SearchScreen(mainViewModel: SearchViewModel,
                     SearcherBar()
                 }
                 CategoryFilter(selectedCategory = selectedCategory)
-                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel)
+                if(session.getUserDetails().get(LoginPref.KEY_ROL) == Rol.jugador) {
+                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel, false, navController)
+                }
+                else{
+                    TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel, true, navController)
+                }
             }
         }
     }

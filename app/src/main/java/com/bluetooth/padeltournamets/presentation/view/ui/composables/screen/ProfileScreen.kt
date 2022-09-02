@@ -30,25 +30,25 @@ import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.bluetooth.padeltournamets.R.drawable.ic_baseline_emoji_emotions_24
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.TopBar
+import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.UserViewModel
 import com.bluetooth.padeltournamets.utilities.session.LoginPref
 
 
 @Composable
-fun ProfileScreen(session: LoginPref, navController: NavController,userViewModel:UserViewModel){
+fun ProfileScreen(session: LoginPref, navController: NavController,userViewModel:UserViewModel,
+                  organizatorViewModel: OrganizatorViewModel){
     Scaffold(topBar = { TopBar() }) {
-
-
 
         if(session.getUserDetails().get(LoginPref.KEY_ROL) == Rol.jugador){
             Column(modifier = Modifier.padding(bottom = 40.dp)) {
-                TopProfileCard(session, navController, userViewModel)
+                TopProfileCard(session, navController, userViewModel, organizatorViewModel)
                 ProfilePlayerData()
             }
         }
         else {
             Column(modifier = Modifier.padding(bottom = 40.dp)) {
-                TopProfileCard(session, navController,userViewModel)
+                TopProfileCard(session, navController,userViewModel,organizatorViewModel)
                 ProfileOrganizatorData()
             }
         }
@@ -57,7 +57,8 @@ fun ProfileScreen(session: LoginPref, navController: NavController,userViewModel
 }
 
 @Composable
-fun TopProfileCard(session: LoginPref, navController: NavController, userViewModel: UserViewModel){
+fun TopProfileCard(session: LoginPref, navController: NavController, userViewModel: UserViewModel,
+                   organizatorViewModel: OrganizatorViewModel){
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 1.dp,

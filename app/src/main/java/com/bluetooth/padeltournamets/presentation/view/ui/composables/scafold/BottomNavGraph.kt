@@ -30,15 +30,13 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
     else
         BottomBarScreen.LogIn.route
 
-
-
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
         composable(route = BottomBarScreen.Search.route) {
             Scaffold(
-                content = {SearchScreen(searchViewModel, tournamentViewModel, organizatorViewModel = organizatorViewModel)},
+                content = {SearchScreen(searchViewModel, tournamentViewModel, organizatorViewModel = organizatorViewModel, session, navController)},
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
@@ -47,17 +45,17 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
             Scaffold(
                 content = { HomeScreen(tournamentViewModel = tournamentViewModel,
                                         organizatorViewModel= organizatorViewModel,
-                                        session = session //navController = navController
+                                        session = session,
+                                        navController = navController
                                         )
                           },
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
-
         }
         composable(route = BottomBarScreen.Profile.route) {
             Scaffold(
-                content = { ProfileScreen(session,navController,userViewModel) },
+                content = { ProfileScreen(session,navController,userViewModel,organizatorViewModel) },
                 //floatingActionButton = {FAB(navController = navController)},
                 bottomBar = { BottomBar(navController = navController,) }
             )
@@ -71,8 +69,16 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
                 bottomBar = { BottomBar(navController = navController,) }
             )
         }
+        composable(route = BottomBarScreen.EditTournament.route) {
+            Scaffold(
+                content = {EditTournament(context = context, navController,
+                    tournamentViewModel = tournamentViewModel,
+                    organizatorViewModel = organizatorViewModel, session)},
+                bottomBar = { BottomBar(navController = navController,) }
+            )
+        }
         composable(route = BottomBarScreen.LogIn.route) {
-            Login(userViewModel, navController,session)
+            Login(userViewModel, navController,session,organizatorViewModel,playerViewModel)
         }
         composable(route = BottomBarScreen.SignUp.route) {
             SignUp(userViewModel = userViewModel, navController, playerViewModel,

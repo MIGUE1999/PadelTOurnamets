@@ -18,6 +18,8 @@ interface IOrganizatorRepository {
 
     fun getOrganizatorWithTournaments() : LiveData<List<OrganizatorWithTournaments>>
 
+    fun getOrganizatorByUserId(userId : Int) : OrganizatorEntity
+
 
 
 }

@@ -29,6 +29,7 @@ class TournamentViewModel @Inject constructor(
     val dateFin = mutableStateOf("")
     val dateLimit = mutableStateOf("")
     val cartel = mutableStateOf<Bitmap?>(null)
+    var touchedTournament : TournamentEntity? = null
 
     val getAllTournaments : LiveData<List<TournamentEntity>> by lazy {
         tournamentRepository.getAllTorneos()
@@ -93,6 +94,23 @@ class TournamentViewModel @Inject constructor(
 
     fun onCartelChanged(img : Bitmap){
         this.cartel.value = img
+    }
+
+    fun onActualTournamentChanged(actualTournament : TournamentEntity){
+        this.touchedTournament = actualTournament
+    }
+
+    fun getTournamentAtributes(tournament : TournamentEntity){
+        onNameChanged(tournament.nombre)
+        onPriceChanged(tournament.premio)
+        onInscriptionCostChanged(tournament.precioInscripcion)
+        onCategoryChanged(tournament.categoria)
+        onDateInitChanged(tournament.fechaInicio)
+        onDateFinChanged(tournament.fechaFin)
+        onDateLimitChanged(tournament.fechaLimiteInscripcion)
+        if(tournament.cartel != null)
+            onCartelChanged(tournament.cartel)
+
     }
 }
 

@@ -30,7 +30,11 @@ class OrganizatorRepositoryImpl @Inject constructor(private val organizatorDao :
     }
 
     override fun getOrganizatorWithTournaments(): LiveData<List<OrganizatorWithTournaments>> {
-        return organizatorDao.getorganizatorWithTournaments()
+        return organizatorDao.getOrganizatorWithTournaments()
+    }
+
+    override fun getOrganizatorByUserId(userId: Int): OrganizatorEntity {
+        return organizatorDao.getOrganizatorByUserId(userId)
     }
 
 

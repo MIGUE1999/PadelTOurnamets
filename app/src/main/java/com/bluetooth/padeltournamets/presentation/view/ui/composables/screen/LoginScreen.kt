@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.model.entities.UserEntity
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.Shapes
@@ -49,7 +50,8 @@ import okhttp3.internal.wait
 
 
 @Composable
-fun Login(userViewModel: UserViewModel, navController: NavController,session : LoginPref){
+fun Login(userViewModel: UserViewModel, navController: NavController,session : LoginPref,
+          organizatorViewModel: OrganizatorViewModel, playerViewModel: PlayerViewModel?){
     val passwordFocusRequester = FocusRequester()
     val focusManager: FocusManager = LocalFocusManager.current
 
@@ -90,11 +92,11 @@ fun Login(userViewModel: UserViewModel, navController: NavController,session : L
                 }
 
                 Button(onClick = {
-                                 userViewModel.checkLoginCredentials()
+                    userViewModel.checkLoginCredentials()
                 },
                     modifier = Modifier.fillMaxWidth()) {
-                        Text("Iniciar Sesion", Modifier.padding(vertical = 8.dp))
-                    }
+                    Text("Iniciar Sesion", Modifier.padding(vertical = 8.dp))
+                }
                 Divider(
                     color = Color.White.copy(alpha = 0.3f),
                     thickness = 1.dp,
@@ -837,6 +839,142 @@ fun TextImputOrganizator(
                     value = value,
                     onValueChange = { inputValue ->
                         organizatorViewModel.onClubNameChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            else -> {
+                Log.d( "InputText", "No coincide el textfield con ningun label")
+            }
+        }
+    }
+}
+
+@Composable
+fun TextEditImput(
+    inputType: InputType,
+    focusRequester: FocusRequester? = null,
+    keyboardActions: KeyboardActions,
+    tournamentViewModel: TournamentViewModel? = null,
+){
+
+    if(tournamentViewModel != null){
+        val value : String
+        when(inputType.label){
+            InputType.NombreTorneo.label -> {
+
+                value = tournamentViewModel.nameTournament.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        tournamentViewModel.onNameChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+
+            }
+            InputType.Premio.label -> {
+                value = tournamentViewModel.priceTournament.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        tournamentViewModel.onPriceChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.PrecioInscripcion.label ->{
+                value = tournamentViewModel.inscriptionCost.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        tournamentViewModel.onInscriptionCostChanged(inputValue)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusOrder(focusRequester ?: FocusRequester()),
+                    leadingIcon = {
+                        if (inputType.icon != null)
+                            Icon(imageVector = inputType.icon, null)
+                    },
+                    label = { Text(text = inputType.label) },
+                    shape = Shapes.small,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
+                    keyboardOptions = inputType.keyboardOptions,
+                    visualTransformation = inputType.visualTransformation,
+                    keyboardActions = keyboardActions
+                )
+            }
+            InputType.FechaLimiteInscripcion.label ->{
+                value = tournamentViewModel.dateLimit.value
+
+                TextField(
+                    value = value,
+                    onValueChange = { inputValue ->
+                        tournamentViewModel.onDateLimitChanged(inputValue)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
