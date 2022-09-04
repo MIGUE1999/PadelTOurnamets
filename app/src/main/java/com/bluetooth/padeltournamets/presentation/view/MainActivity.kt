@@ -1,20 +1,26 @@
 package com.bluetooth.padeltournamets.presentation.view
 
 
+import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.ScaffoldScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.PadelTOurnametsTheme
 import com.bluetooth.padeltournamets.presentation.viewmodel.*
 import com.bluetooth.padeltournamets.utilities.session.LoginPref
+import com.razorpay.Checkout
+import com.razorpay.PaymentResultListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 
 @AndroidEntryPoint
-class MainActivity: ComponentActivity() {
+class MainActivity: ComponentActivity(), PaymentResultListener {
 
 
     lateinit var navController : NavHostController
@@ -31,6 +37,7 @@ class MainActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
         session = LoginPref(this)
+        Checkout.preload(this@MainActivity)
 
 
         setContent {
@@ -60,5 +67,39 @@ class MainActivity: ComponentActivity() {
     */
     }
 
+
+
+    override fun onPaymentSuccess(p0: String?) {
+        navController.navigate(BottomBarScreen.Home.route)
     }
 
+    override fun onPaymentError(p0: Int, p1: String?) {
+        navController.navigate(BottomBarScreen.TournamentDetail.route)
+    }
+
+}
+
+fun savePayments(amount : Int, activity : Activity ){
+    val checkout = Checkout()
+    checkout.setKeyID("rzp_test_xpZWqx3vLFKVRg")
+    try{
+        val options = JSONObject()
+        options.put("name", "Razorpay Demo")
+        options.put("description", "Pago para la inscripción al torneo")
+        //options.put("image", "")
+        options.put("theme.color", "#3399cc")
+        options.put("currency", "EUR")
+        options.put("amount", amount * 100)
+
+        val retryObj = JSONObject()
+        retryObj.put("enabled", true)
+        retryObj.put("max_count", 4)
+        retryObj.put("retry", retryObj)
+
+        checkout.open(activity,options)
+    }catch (e : Exception){
+        Toast.makeText(activity, "Error en el pago " + e.message, Toast.LENGTH_LONG)
+            .show()
+        e.printStackTrace()
+    }
+}

@@ -53,6 +53,7 @@ fun HomeScreen(
                         idUsr = session.getUserDetails().get(LoginPref.KEY_ID)!!.toInt()
                     }
                     organizatorViewModel.getOrganizatorByUserId(idUsr)
+                    tournamentViewModel.clearTournamentForm()
                     navController.navigate(BottomBarScreen.CreateTournament.route)
                 }) {
                     Text(text = "Crear Torneo", color = Color.White, style = MaterialTheme.typography.h3)

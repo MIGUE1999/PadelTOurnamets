@@ -1,8 +1,6 @@
 package com.bluetooth.padeltournamets.presentation.viewmodel
 
 import android.graphics.Bitmap
-import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -92,7 +90,7 @@ class TournamentViewModel @Inject constructor(
         this.dateLimit.value = dateLimit
     }
 
-    fun onCartelChanged(img : Bitmap){
+    fun onCartelChanged(img: Bitmap?){
         this.cartel.value = img
     }
 
@@ -111,6 +109,18 @@ class TournamentViewModel @Inject constructor(
         if(tournament.cartel != null)
             onCartelChanged(tournament.cartel)
 
+    }
+
+    fun clearTournamentForm(){
+        onNameChanged("")
+        onPriceChanged("")
+        onInscriptionCostChanged("")
+        onCategoryChanged("")
+        onDateInitChanged("")
+        onDateFinChanged("")
+        onDateLimitChanged("")
+        onCartelChanged(null)
+        touchedTournament = null
     }
 }
 

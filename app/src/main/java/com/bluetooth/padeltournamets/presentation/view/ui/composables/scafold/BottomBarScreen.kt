@@ -47,4 +47,10 @@ sealed class BottomBarScreen(
         title = "SignUp",
         icon = Icons.Default.Add
     )
+
+    object TournamentDetail : BottomBarScreen(
+        route = "tournament_detail",
+        title = "TournamentDetail",
+        icon = Icons.Default.Add
+    )
 }

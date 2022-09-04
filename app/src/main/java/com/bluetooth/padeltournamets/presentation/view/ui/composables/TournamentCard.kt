@@ -1,9 +1,11 @@
 package com.bluetooth.padeltournamets.presentation.view.ui.composables.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -12,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bluetooth.padeltournamets.R
@@ -20,7 +23,9 @@ import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.Bo
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 
 @Composable
-fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tournamentViewModel: TournamentViewModel,
+fun TournamentCard(isOrganizador : Boolean,
+                   tournament : TournamentEntity,
+                   tournamentViewModel: TournamentViewModel,
                    navController: NavController
 ){
     Card(
@@ -47,7 +52,14 @@ fun TournamentCard(isOrganizador : Boolean, tournament : TournamentEntity, tourn
             Column(
                 Modifier.weight(1f),
             ){
-                Text("NombreTorneo:" + tournament.nombre, style= MaterialTheme.typography.h5)
+                ClickableText(text= AnnotatedString("NombreTorneo:" + tournament.nombre),
+                    style= MaterialTheme.typography.h5,
+                onClick = {
+                    Log.d("ClickableText", "SE METE EN EL ONCLICK")
+                    tournamentViewModel.onActualTournamentChanged(tournament)
+                    tournamentViewModel.getTournamentAtributes(tournament)
+                    navController.navigate(BottomBarScreen.TournamentDetail.route)
+                })
                 Text("FechaInicio: ")
                 Text("FechaFin:")
                 Text("Categoria")

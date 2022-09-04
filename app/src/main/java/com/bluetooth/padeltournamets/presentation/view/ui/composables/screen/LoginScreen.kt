@@ -196,9 +196,26 @@ sealed class InputType(val label:String,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         visualTransformation = VisualTransformation.None
     )
-
     object FechaLimiteInscripcion:InputType(
         label = "Fecha limite de Inscripcion al Torneo",
+        icon = null,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        visualTransformation = VisualTransformation.None
+    )
+    object Categoria:InputType(
+        label = "Categoria",
+        icon = null,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        visualTransformation = VisualTransformation.None
+    )
+    object FechaInicio:InputType(
+        label = "Fecha de inicio del torneo",
+        icon = null,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        visualTransformation = VisualTransformation.None
+    )
+    object FechaFin:InputType(
+        label = "Fecha de fin del torneo",
         icon = null,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         visualTransformation = VisualTransformation.None
