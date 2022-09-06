@@ -3,6 +3,7 @@ package com.bluetooth.padeltournamets.presentation.view
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.ScaffoldScreen
+import com.bluetooth.padeltournamets.presentation.view.ui.composables.screen.Rol
 import com.bluetooth.padeltournamets.presentation.view.ui.ui.theme.PadelTOurnametsTheme
 import com.bluetooth.padeltournamets.presentation.viewmodel.*
 import com.bluetooth.padeltournamets.utilities.session.LoginPref
@@ -37,6 +39,14 @@ class MainActivity: ComponentActivity(), PaymentResultListener {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
         session = LoginPref(this)
+        if(session.getUserDetails().get(LoginPref.KEY_ROL) == Rol.organizador){
+            Log.d("MAINACTIVITY:", "Se hace esto")
+            tournamentViewModel.onActualSessionChanged(session)
+            val tournamentsByOrgId = tournamentViewModel.getTournametsByOrgId
+            tournamentsByOrgId.observe(this){
+                Log.d("MainActivity: " ,  "${it.size}")
+            }
+        }
         Checkout.preload(this@MainActivity)
 
 

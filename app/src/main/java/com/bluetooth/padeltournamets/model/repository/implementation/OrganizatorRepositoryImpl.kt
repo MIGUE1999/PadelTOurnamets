@@ -1,6 +1,7 @@
 package com.bluetooth.padeltournamets.model.repository.implementation
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.bluetooth.padeltournamets.model.dao.OrganizatorDao
 import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
 import com.bluetooth.padeltournamets.model.entities.relations.OrganizatorWithTournaments
@@ -29,8 +30,8 @@ class OrganizatorRepositoryImpl @Inject constructor(private val organizatorDao :
         organizatorDao.deleteOrganizator(organizator)
     }
 
-    override fun getOrganizatorWithTournaments(): LiveData<List<OrganizatorWithTournaments>> {
-        return organizatorDao.getOrganizatorWithTournaments()
+    override fun getOrganizatorWithTournaments(idOr:Int): List<OrganizatorWithTournaments> {
+        return organizatorDao.getOrganizatorWithTournaments(idOr)
     }
 
     override fun getOrganizatorByUserId(userId: Int): OrganizatorEntity {

@@ -1,6 +1,7 @@
 package com.bluetooth.padeltournamets.model.repository.interfaces
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
 import com.bluetooth.padeltournamets.model.entities.relations.OrganizatorWithTournaments
 
@@ -16,7 +17,7 @@ interface IOrganizatorRepository {
 
     suspend fun deleteOrganizator(organizadorModel: OrganizatorEntity)
 
-    fun getOrganizatorWithTournaments() : LiveData<List<OrganizatorWithTournaments>>
+    fun getOrganizatorWithTournaments(idOr : Int) : List<OrganizatorWithTournaments>
 
     fun getOrganizatorByUserId(userId : Int) : OrganizatorEntity
 

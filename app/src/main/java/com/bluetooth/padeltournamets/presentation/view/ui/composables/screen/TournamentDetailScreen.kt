@@ -24,10 +24,11 @@ import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.presentation.view.savePayments
 import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.BottomBarScreen
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 
 
 @Composable
-fun TournamentScreen(tournamentViewModel: TournamentViewModel, navController : NavController) {
+fun TournamentScreen(tournamentViewModel: TournamentViewModel, navController : NavController, session : LoginPref) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current as Activity
 

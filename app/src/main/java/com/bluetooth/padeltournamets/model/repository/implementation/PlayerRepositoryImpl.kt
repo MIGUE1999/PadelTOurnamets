@@ -28,4 +28,8 @@ class PlayerRepositoryImpl @Inject constructor(private val playerDao : PlayerDao
         playerDao.deleteJugador(playerModel)
     }
 
+    override fun getPlayerByUserId(userId: Int): PlayerEntity {
+        return playerDao.getPlayerByUserId(userId)
+    }
+
 }

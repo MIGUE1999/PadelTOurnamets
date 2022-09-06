@@ -14,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,10 @@ import com.bluetooth.padeltournamets.presentation.view.ui.composables.scafold.To
 import com.bluetooth.padeltournamets.presentation.viewmodel.OrganizatorViewModel
 import com.bluetooth.padeltournamets.presentation.viewmodel.TournamentViewModel
 import com.bluetooth.padeltournamets.utilities.session.LoginPref
+import com.bluetooth.padeltournamets.utilities.session.LoginPref.Companion.KEY_EMAIL
+import com.bluetooth.padeltournamets.utilities.session.LoginPref.Companion.KEY_ORG_ID
 import com.valentinilk.shimmer.shimmer
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
@@ -40,7 +44,7 @@ fun HomeScreen(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Tus Torneos", color = Color.White, style = MaterialTheme.typography.h3)
                 TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel,
-                    false, navController)
+                    false, navController, session)
             }
         }
     }
@@ -48,20 +52,15 @@ fun HomeScreen(
         Scaffold(topBar = { TopBar() }) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxHeight(0.9f)) {
                 Button(onClick = {
-                    var idUsr = 0
-                    session.getUserDetails().get(LoginPref.KEY_ID)?.let {
-                        idUsr = session.getUserDetails().get(LoginPref.KEY_ID)!!.toInt()
-                    }
-                    organizatorViewModel.getOrganizatorByUserId(idUsr)
                     tournamentViewModel.clearTournamentForm()
                     navController.navigate(BottomBarScreen.CreateTournament.route)
                 }) {
                     Text(text = "Crear Torneo", color = Color.White, style = MaterialTheme.typography.h3)
                 }
                 Spacer()
-                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel,
-                    true, navController)
 
+                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel,
+                    true, navController, session)
             }
         }
     }
@@ -85,37 +84,35 @@ fun HomeScreen(
 fun TournamentList(tournamentViewModel : TournamentViewModel,
                    organizatorViewModel: OrganizatorViewModel,
                    isOrganizator : Boolean,
-                   navController: NavController
+                   navController: NavController,
+                   session: LoginPref
                    ) {
     val tournaments by tournamentViewModel.getAllTournaments.observeAsState(arrayListOf())
+    tournamentViewModel.onActualSessionChanged(session)
+    val tournamentsByOrgId = tournamentViewModel.getTournametsByOrgId
+    val tournamentsByOrgIdState by tournamentsByOrgId.observeAsState(arrayListOf())
+    //val tournamentsByOrgId by tournamentViewModel.getTournametsByOrgId.observeAsState(listOf())
+    //val lifecycleOwner = LocalLifecycleOwner.current
 
-    val orgTournaments by organizatorViewModel.getAllOrganizatorWithTournaments.observeAsState(
-        arrayListOf()
-    )
-    Log.d("Home Screen", "Org Tournaments:" + orgTournaments.size)
-
-    LazyColumn() {
-        items(items = orgTournaments) { tournament ->
-            Log.d("homescreen:","Torneo:" + tournament.toString())
-            Log.d("homescreen:","Torneo:" + tournament.tournaments.size)
-
-            for (item in tournament.tournaments) {
-                Log.d("homescreen:","torneo:" + item.nombre)
-                TournamentCard(isOrganizador = true, item, tournamentViewModel, navController)
+    if(isOrganizator) {
+            LazyColumn() {
+                    items(items = tournamentsByOrgIdState) { tournament ->
+                        TournamentCard(
+                            isOrganizador = true,
+                            tournament,
+                            tournamentViewModel,
+                            navController
+                        )
+                    }
             }
-
+    }
+    else{
+        LazyColumn() {
+            items(items = tournaments) { tournament ->
+                TournamentCard(isOrganizador = true, tournament, tournamentViewModel, navController)
+            }
         }
     }
-
-/*
-    Log.d("HomeScreen:", "Numero torneos: " + tournaments.size)
-    LazyColumn() {
-        items(items = tournaments) { tournament ->
-            TournamentCard(isOrganizador = true, tournament, tournamentViewModel)
-        }
-    }
-*/
-
 }
 
 

@@ -1,13 +1,18 @@
 package com.bluetooth.padeltournamets.presentation.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
 
 import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.model.repository.interfaces.ITournamentRepository
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
+import com.bluetooth.padeltournamets.utilities.session.LoginPref.Companion.KEY_ORG_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -16,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TournamentViewModel @Inject constructor(
-    private val tournamentRepository : ITournamentRepository
+    private val tournamentRepository : ITournamentRepository,
 ) : ViewModel()
 {
     val nameTournament = mutableStateOf("")
@@ -28,6 +33,14 @@ class TournamentViewModel @Inject constructor(
     val dateLimit = mutableStateOf("")
     val cartel = mutableStateOf<Bitmap?>(null)
     var touchedTournament : TournamentEntity? = null
+    lateinit var loginPref : LoginPref
+
+
+
+    val getTournametsByOrgId : LiveData<List<TournamentEntity>> by lazy {
+        Log.d("TOURNAMENT VIEWMODEL", "idOrg: " + loginPref.getUserDetails().get(KEY_ORG_ID)!!.toInt())
+        tournamentRepository.getTournamentsByOrgId(loginPref.getUserDetails().get(KEY_ORG_ID)!!.toInt())
+    }
 
     val getAllTournaments : LiveData<List<TournamentEntity>> by lazy {
         tournamentRepository.getAllTorneos()
@@ -98,6 +111,10 @@ class TournamentViewModel @Inject constructor(
         this.touchedTournament = actualTournament
     }
 
+    fun onActualSessionChanged(actualSession : LoginPref){
+        this.loginPref = actualSession
+    }
+
     fun getTournamentAtributes(tournament : TournamentEntity){
         onNameChanged(tournament.nombre)
         onPriceChanged(tournament.premio)
@@ -122,6 +139,8 @@ class TournamentViewModel @Inject constructor(
         onCartelChanged(null)
         touchedTournament = null
     }
+
+
 }
 
 

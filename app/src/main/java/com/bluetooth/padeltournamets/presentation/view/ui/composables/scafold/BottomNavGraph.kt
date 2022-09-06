@@ -85,7 +85,7 @@ fun BottomNavGraph(navController: NavHostController, searchViewModel: SearchView
                 organizatorViewModel = organizatorViewModel , context )
         }
         composable(route = BottomBarScreen.TournamentDetail.route) {
-           TournamentScreen(tournamentViewModel = tournamentViewModel, navController = navController)
+           TournamentScreen(tournamentViewModel = tournamentViewModel, navController = navController, session)
         }
     }
 }

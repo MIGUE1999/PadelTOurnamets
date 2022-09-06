@@ -60,10 +60,10 @@ fun TournamentCard(isOrganizador : Boolean,
                     tournamentViewModel.getTournamentAtributes(tournament)
                     navController.navigate(BottomBarScreen.TournamentDetail.route)
                 })
-                Text("FechaInicio: ")
-                Text("FechaFin:")
-                Text("Categoria")
-                Text("Premio")
+                Text("FechaInicio: " + tournament.fechaInicio)
+                Text("FechaFin:" + tournament.fechaFin)
+                Text("Categoria" + tournament.categoria)
+                Text("Premio" + tournament.premio)
             }
             //Spacer()
             if(isOrganizador) {

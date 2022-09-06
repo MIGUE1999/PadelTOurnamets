@@ -85,6 +85,7 @@ class UserViewModel @Inject constructor(
 
     fun insertPlayerByMail(mail:String, playerViewModel: PlayerViewModel){
         viewModelScope.launch(Dispatchers.IO) {
+            delay(1000)
             idUsr = userRepository.getIdByMail(mail)
             var player = PlayerEntity(nickname = playerViewModel.nickname.value, userId = idUsr )
             playerViewModel.insertPlayer(player)
@@ -93,6 +94,7 @@ class UserViewModel @Inject constructor(
 
     fun insertOrganizatorByMail(mail:String, organizatorViewModel: OrganizatorViewModel){
         viewModelScope.launch(Dispatchers.IO) {
+            delay(1000)
             idUsr = userRepository.getIdByMail(mail)
             var organizator = OrganizatorEntity(cif = organizatorViewModel.cif.value ,
                                                 clubName=organizatorViewModel.clubName.value,

@@ -141,19 +141,13 @@ fun EditTournament(context : Context, navController: NavController,
                 val lifecycleOwner = LocalLifecycleOwner.current
                 var idOrg = 0
 
-                organizatorViewModel.org.observe(lifecycleOwner) { organizator ->
-                    if (organizator != null) {
-                        idOrg = organizator.id
-                    } else Log.d("MAIN", "NO ENTRA")
-                }
-
                 Button(onClick = {
-                    /*
+
                     var idOrg = 0
-                    session.getUserDetails().get(LoginPref.KEY_ID)?.let {
-                        idOrg = session.getUserDetails().get(LoginPref.KEY_ID)!!.toInt()
+                    session.getUserDetails().get(LoginPref.KEY_ORG_ID)?.let {
+                        idOrg = session.getUserDetails().get(LoginPref.KEY_ORG_ID)!!.toInt()
                     }
-                    */
+
                     var tournament = TournamentEntity(
                         id = tournamentViewModel.touchedTournament!!.id,
                         nombre = tournamentViewModel.nameTournament.value,
@@ -166,7 +160,7 @@ fun EditTournament(context : Context, navController: NavController,
                         fechaLimiteInscripcion = tournamentViewModel.dateLimit.value,
                         idOrganizator = idOrg
                     )
-                    Log.d("CREATETOURNAMENT", "ID USUARIO: $idOrg")
+                    Log.d("EditTournament", "ID USUARIO: $idOrg")
                     tournamentViewModel.updateTournament(tournament)
                     Log.d("CreatePreNav", tournamentViewModel.getAllTournaments.toString())
                     navController.navigate(BottomBarScreen.Home.route)

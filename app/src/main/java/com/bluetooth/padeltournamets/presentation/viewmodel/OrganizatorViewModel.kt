@@ -11,6 +11,7 @@ import com.bluetooth.padeltournamets.model.entities.TournamentEntity
 import com.bluetooth.padeltournamets.model.entities.UserEntity
 import com.bluetooth.padeltournamets.model.entities.relations.OrganizatorWithTournaments
 import com.bluetooth.padeltournamets.model.repository.interfaces.IOrganizatorRepository
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,9 +32,12 @@ class OrganizatorViewModel @Inject constructor(
     val org: LiveData<OrganizatorEntity>
         get() = _org
 
-    val getAllOrganizatorWithTournaments : LiveData<List<OrganizatorWithTournaments>> by lazy {
-        organizatorRepository.getOrganizatorWithTournaments()
-    }
+
+    val _organizatorsTournaments = MutableLiveData<List<OrganizatorWithTournaments>>()
+    val organizatorsTournaments: LiveData<List<OrganizatorWithTournaments>>
+        get() = _organizatorsTournaments
+
+
 
     val getAllOrganizators : LiveData<List<OrganizatorEntity>> by lazy {
         organizatorRepository.getAllOrganizators()
@@ -73,14 +77,24 @@ class OrganizatorViewModel @Inject constructor(
         bankAccount.value = bankAcc
     }
 
-
-
-    fun getOrganizatorByUserId(userId: Int){
+    fun getOrganizatorByUserId(user: UserEntity, session: LoginPref){
         viewModelScope.launch(Dispatchers.IO) {
-            val usrPrueba = organizatorRepository.getOrganizatorByUserId(userId)
-            Log.d("OrgViewModel", "Organizator: " + usrPrueba.id + usrPrueba.clubName)
-            _org.postValue(usrPrueba)
+            val organizator = organizatorRepository.getOrganizatorByUserId(user.id)
+            Log.d("OrgViewModel", "Organizator: " + organizator.id + organizator.clubName)
+            _org.postValue(organizator)
+            session.createLoginSession(user.id,user.nombre, user.email, user.rol, organizator.id.toString())
         }
     }
+
+    fun getOrganizatorsTournaments(organizatorId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            var orgTournaments = organizatorRepository.getOrganizatorWithTournaments(organizatorId)
+            Log.d("FIN", "ORGTOURNAMENTS:" + orgTournaments.toString())
+            _organizatorsTournaments.postValue(orgTournaments)
+        }
+    }
+
+
+
 
 }

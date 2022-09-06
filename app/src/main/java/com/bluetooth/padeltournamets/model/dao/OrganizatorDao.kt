@@ -1,6 +1,7 @@
 package com.bluetooth.padeltournamets.model.dao
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
 import com.bluetooth.padeltournamets.model.entities.relations.OrganizatorWithTournaments
@@ -26,15 +27,23 @@ interface OrganizatorDao {
     @Query("SELECT * FROM organizador WHERE userId = :idUser")
     fun getOrganizatorByUserId(idUser: Int) : OrganizatorEntity
 
-    @Transaction
-    @Query("SELECT * FROM organizador INNER JOIN torneo ON idOrganizator = idOrganizator")
-    fun getOrganizatorWithTournaments() : LiveData<List<OrganizatorWithTournaments>>
     /*
     @Transaction
-    @Query("SELECT * FROM organizador, torneo WHERE organizador.id = torneo.idOrganizator AND organizador.userId = :userId")
-    fun getorganizatorWithTournaments(userId: Int) : LiveData<List<OrganizatorWithTournaments>>
+    @Query("SELECT * FROM organizador INNER JOIN torneo ON organizador.id = torneo.idOrganizator")
+    fun getOrganizatorWithTournaments() : LiveData<List<OrganizatorWithTournaments>>
 
-    */
+*/
+
+    @Transaction
+    @Query("SELECT * FROM organizador " +
+            "INNER JOIN torneo ON organizador.id = torneo.idOrganizator " +
+            "WHERE organizador.id = :idOr")
+    fun getOrganizatorWithTournaments(idOr : Int) : List<OrganizatorWithTournaments>
+
+    @Transaction
+    @Query("SELECT * FROM organizador, torneo WHERE torneo.categoria = :categoria")
+    fun getTournamentsByCategory(categoria: String) : LiveData<List<OrganizatorWithTournaments>>
+
 
     /*
     @Transaction

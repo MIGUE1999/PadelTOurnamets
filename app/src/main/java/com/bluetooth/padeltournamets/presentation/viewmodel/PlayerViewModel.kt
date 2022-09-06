@@ -1,12 +1,16 @@
 package com.bluetooth.padeltournamets.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
 import com.bluetooth.padeltournamets.model.entities.PlayerEntity
 import com.bluetooth.padeltournamets.model.entities.UserEntity
 import com.bluetooth.padeltournamets.model.repository.interfaces.IPlayerRepository
+import com.bluetooth.padeltournamets.utilities.session.LoginPref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -20,6 +24,9 @@ class PlayerViewModel @Inject constructor(
 {
     val nickname = mutableStateOf("")
 
+    val _player = MutableLiveData<PlayerEntity>()
+    val player: LiveData<PlayerEntity>
+        get() = _player
 
 
 
@@ -53,5 +60,15 @@ class PlayerViewModel @Inject constructor(
     fun onNicknameChanged(nick:String){
         nickname.value = nick
     }
+
+    fun getPlayerByUserId(user: UserEntity, session: LoginPref){
+        viewModelScope.launch(Dispatchers.IO) {
+            val play = playerRepository.getPlayerByUserId(user.id)
+            Log.d("OrgViewModel", "Organizator: " + play.nickname)
+            _player.postValue(play)
+            session.createLoginSession(user.id,user.nombre, user.email, user.rol, play.id.toString())
+        }
+    }
+
 
 }

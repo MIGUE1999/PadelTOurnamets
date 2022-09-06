@@ -29,5 +29,7 @@ interface TournamentDao  {
     @Delete
     suspend fun deleteTournaments(tournamentEntities: List<TournamentEntity>)
 
+    @Query("SELECT * FROM torneo WHERE idOrganizator = :idOrg")
+    fun getTournamentsByOrgId(idOrg: Int) : LiveData<List<TournamentEntity>>
 
 }

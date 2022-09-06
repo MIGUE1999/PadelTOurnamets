@@ -2,6 +2,7 @@ package com.bluetooth.padeltournamets.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.bluetooth.padeltournamets.model.entities.OrganizatorEntity
 import com.bluetooth.padeltournamets.model.entities.PlayerEntity
 
 @Dao
@@ -21,6 +22,9 @@ interface PlayerDao {
 
     @Delete
     suspend fun deleteJugador(player: PlayerEntity)
+
+    @Query("SELECT * FROM jugador WHERE userId = :idUser")
+    fun getPlayerByUserId(idUser: Int) : PlayerEntity
 
 
 }

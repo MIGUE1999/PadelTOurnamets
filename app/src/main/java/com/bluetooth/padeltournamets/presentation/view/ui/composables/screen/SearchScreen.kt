@@ -49,22 +49,22 @@ fun SearchScreen(mainViewModel: SearchViewModel,
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.925f),
-            color = Color.White,
+            color = Color.DarkGray,
             elevation = 8.dp,
 
         ) {
             Column {
                 Row(modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)) {
+                    .background(Color.DarkGray)) {
                     SearcherBar()
                 }
                 CategoryFilter(selectedCategory = selectedCategory)
                 if(session.getUserDetails().get(LoginPref.KEY_ROL) == Rol.jugador) {
-                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel, false, navController)
+                TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel, false, navController,session)
                 }
                 else{
-                    TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel, true, navController)
+                    TournamentList(tournamentViewModel = tournamentViewModel, organizatorViewModel = organizatorViewModel, true, navController,session)
                 }
             }
         }

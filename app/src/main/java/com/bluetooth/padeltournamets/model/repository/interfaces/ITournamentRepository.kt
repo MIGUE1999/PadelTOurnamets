@@ -18,4 +18,8 @@ interface ITournamentRepository {
     suspend fun deleteTorneo(tournamentEntity: TournamentEntity)
 
     suspend fun deleteTorneos(tournamentEntities: List<TournamentEntity>)
+
+    fun getTournamentsByOrgId(idOrg : Int) : LiveData<List<TournamentEntity>>
+
+
 }

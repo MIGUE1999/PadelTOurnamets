@@ -85,10 +85,15 @@ fun Login(userViewModel: UserViewModel, navController: NavController,session : L
 
                 userViewModel.usr.observe(lifecycleOwner) { user ->
                     if(user != null) {
-                        Log.d("MAIN", "ENTRA ${user.email}")
-                        session.createLoginSession(user.id,user.nombre, user.email, user.rol)
-                        navController.navigate(BottomBarScreen.Home.route)
-                    } else Log.d("MAIN", "NO ENTRA")
+                        if(user.rol == Rol.organizador){
+                            organizatorViewModel.getOrganizatorByUserId(user, session)
+                            navController.navigate(BottomBarScreen.Home.route)
+                        }
+                        else{
+                            playerViewModel?.getPlayerByUserId(user, session)
+                            navController.navigate(BottomBarScreen.Home.route)
+                        }
+                    }
                 }
 
                 Button(onClick = {
